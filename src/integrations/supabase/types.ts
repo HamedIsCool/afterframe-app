@@ -14,7 +14,246 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      afterframes: {
+        Row: {
+          author_id: string
+          created_at: string | null
+          id: string
+          is_published: boolean | null
+          published_at: string | null
+          the_event: string
+          the_gut_punch: string
+          the_one_liner: string
+          the_pivot: string
+          the_retroactive_why: string
+          title: string
+        }
+        Insert: {
+          author_id: string
+          created_at?: string | null
+          id?: string
+          is_published?: boolean | null
+          published_at?: string | null
+          the_event: string
+          the_gut_punch: string
+          the_one_liner: string
+          the_pivot: string
+          the_retroactive_why: string
+          title: string
+        }
+        Update: {
+          author_id?: string
+          created_at?: string | null
+          id?: string
+          is_published?: boolean | null
+          published_at?: string | null
+          the_event?: string
+          the_gut_punch?: string
+          the_one_liner?: string
+          the_pivot?: string
+          the_retroactive_why?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "afterframes_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      comments: {
+        Row: {
+          afterframe_id: string
+          author_id: string
+          content: string
+          created_at: string | null
+          id: string
+        }
+        Insert: {
+          afterframe_id: string
+          author_id: string
+          content: string
+          created_at?: string | null
+          id?: string
+        }
+        Update: {
+          afterframe_id?: string
+          author_id?: string
+          content?: string
+          created_at?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_afterframe_id_fkey"
+            columns: ["afterframe_id"]
+            isOneToOne: false
+            referencedRelation: "afterframes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      likes: {
+        Row: {
+          afterframe_id: string
+          created_at: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          afterframe_id: string
+          created_at?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          afterframe_id?: string
+          created_at?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "likes_afterframe_id_fkey"
+            columns: ["afterframe_id"]
+            isOneToOne: false
+            referencedRelation: "afterframes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          actor_id: string
+          afterframe_id: string
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          recipient_id: string
+          type: string
+        }
+        Insert: {
+          actor_id: string
+          afterframe_id: string
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          recipient_id: string
+          type: string
+        }
+        Update: {
+          actor_id?: string
+          afterframe_id?: string
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          recipient_id?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_afterframe_id_fkey"
+            columns: ["afterframe_id"]
+            isOneToOne: false
+            referencedRelation: "afterframes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string
+          username: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id: string
+          username: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      saves: {
+        Row: {
+          afterframe_id: string
+          created_at: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          afterframe_id: string
+          created_at?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          afterframe_id?: string
+          created_at?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saves_afterframe_id_fkey"
+            columns: ["afterframe_id"]
+            isOneToOne: false
+            referencedRelation: "afterframes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "saves_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
