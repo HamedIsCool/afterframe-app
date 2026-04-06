@@ -27,8 +27,8 @@ const Navbar = () => {
   return (
     <nav className="border-b border-border bg-background sticky top-0 z-50">
       <div className="container mx-auto flex items-center justify-between h-14 px-4">
-        <Link to={user ? "/feed" : "/"} className="text-lg font-bold tracking-tight text-foreground">
-          Afterframe
+        <Link to={user ? "/feed" : "/"} className="flex items-center">
+          <img src="/logo.png" alt="Afterframe" className="h-18 w-36" />
         </Link>
 
         {user && (
