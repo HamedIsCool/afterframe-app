@@ -1,13 +1,23 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AfterframeCard from "@/components/AfterframeCard";
+import { useAuth } from "@/hooks/useAuth";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const ProfilePage = () => {
   const { username } = useParams();
+  const { user } = useAuth();
   const [profile, setProfile] = useState<any>(null);
   const [frames, setFrames] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editBio, setEditBio] = useState("");
+  const [editAvatar, setEditAvatar] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const isOwner = user?.id === profile?.id;
 
   useEffect(() => {
     const fetch = async () => {
@@ -39,6 +49,33 @@ const ProfilePage = () => {
     fetch();
   }, [username]);
 
+  useEffect(() => {
+    if (searchParams.get("edit") === "true" && profile) {
+      setEditName(profile.full_name || "");
+      setEditBio(profile.bio || "");
+      setEditAvatar(profile.avatar_url || "");
+      setEditOpen(true);
+      setSearchParams({});
+    }
+  }, [searchParams, profile]);
+
+  const handleSaveProfile = async () => {
+    setSaving(true);
+    await supabase.from("profiles").update({
+      full_name: editName,
+      bio: editBio,
+      avatar_url: editAvatar,
+    }).eq("id", user!.id);
+    setProfile((p: any) => ({ 
+      ...p, 
+      full_name: editName, 
+      bio: editBio, 
+      avatar_url: editAvatar 
+    }));
+    setSaving(false);
+    setEditOpen(false);
+  };
+
   if (loading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>;
   if (!profile) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">User not found</div>;
 
@@ -53,7 +90,22 @@ const ProfilePage = () => {
           )}
         </div>
         <div>
-          <h1 className="text-xl font-bold text-foreground">{profile.full_name || profile.username}</h1>
+          <div className="flex items-center gap-2 mb-1">
+            <h1 className="text-xl font-bold text-foreground">{profile.full_name || profile.username}</h1>
+            {isOwner && (
+              <button
+                onClick={() => { 
+                  setEditName(profile.full_name || ""); 
+                  setEditBio(profile.bio || ""); 
+                  setEditAvatar(profile.avatar_url || ""); 
+                  setEditOpen(true); 
+                }}
+                className="text-xs text-[#888] border border-[#2A2A2A] px-3 py-1 hover:border-[#C8A96E] hover:text-[#C8A96E] transition-colors"
+              >
+                Edit Profile
+              </button>
+            )}
+          </div>
           <p className="text-sm text-muted-foreground">@{profile.username}</p>
           {profile.bio && <p className="text-sm text-foreground mt-1">{profile.bio}</p>}
           <p className="text-xs text-muted-foreground mt-1">0 followers · 0 following</p>
@@ -76,6 +128,91 @@ const ProfilePage = () => {
         ))}
         {frames.length === 0 && <p className="text-muted-foreground text-sm">No published stories yet.</p>}
       </div>
+
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="bg-[#141414] border border-[#2A2A2A] text-[#F5F0E8] max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-[#F5F0E8] font-semibold">
+              Edit Profile
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 mt-2">
+            {/* Avatar upload */}
+            <div>
+              <label className="text-xs uppercase tracking-widest text-[#888] block mb-2">
+                Picture
+              </label>
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-[#0A0A0A] border border-[#2A2A2A] overflow-hidden flex items-center justify-center text-[#888] text-xl shrink-0">
+                  {editAvatar ? (
+                    <img src={editAvatar} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <span>{editName?.charAt(0)?.toUpperCase() || "?"}</span>
+                  )}
+                </div>
+                <label className="cursor-pointer text-sm text-[#C8A96E] border border-[#C8A96E]/40 px-4 py-2 hover:bg-[#C8A96E]/10 transition-colors">
+                  Upload Photo
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file || !user) return;
+                      const ext = file.name.split(".").pop();
+                      const path = `${user.id}/avatar.${ext}`;
+                      const { error } = await supabase.storage
+                        .from("avatars")
+                        .upload(path, file, { upsert: true });
+                      if (error) return;
+                      const { data } = supabase.storage
+                        .from("avatars")
+                        .getPublicUrl(path);
+                      setEditAvatar(data.publicUrl);
+                    }}
+                  />
+                </label>
+              </div>
+            </div>
+            <div>
+              <label className="text-xs uppercase tracking-widest text-[#888] block mb-1">
+                Display Name
+              </label>
+              <input
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                className="w-full bg-[#0A0A0A] border border-[#2A2A2A] px-3 py-2 text-sm text-[#F5F0E8] outline-none focus:border-[#C8A96E] transition-colors"
+              />
+            </div>
+            <div>
+              <label className="text-xs uppercase tracking-widest text-[#888] block mb-1">
+                Bio
+              </label>
+              <textarea
+                value={editBio}
+                onChange={(e) => setEditBio(e.target.value)}
+                rows={3}
+                className="w-full bg-[#0A0A0A] border border-[#2A2A2A] px-3 py-2 text-sm text-[#F5F0E8] outline-none focus:border-[#C8A96E] transition-colors resize-none"
+              />
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                onClick={() => setEditOpen(false)}
+                className="text-sm text-[#888] px-4 py-2 border border-[#2A2A2A] hover:border-[#F5F0E8] transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveProfile}
+                disabled={saving}
+                className="text-sm bg-[#C8A96E] text-[#0A0A0A] font-semibold px-4 py-2 hover:bg-[#B89558] transition-colors disabled:opacity-50"
+              >
+                {saving ? "Saving..." : "Save Changes"}
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

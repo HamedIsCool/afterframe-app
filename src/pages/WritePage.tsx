@@ -68,40 +68,141 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-2xl">
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Give your story a title"
-        className="w-full bg-transparent text-3xl font-bold text-foreground placeholder:text-muted-foreground border-none outline-none pb-4 border-b border-border focus:border-accent transition-colors"
-        style={{ borderBottom: "1px solid" }}
-      />
+    <div className="min-h-screen bg-[#0A0A0A] py-10 px-4 font-['Space_Grotesk']">
+      <div className="w-full max-w-[640px] mx-auto">
 
-      <div className="mt-8 space-y-8">
-        {fields.map((field) => (
-          <div key={field.key}>
-            <label className={`text-sm uppercase tracking-widest font-medium block mb-1 ${field.special ? "text-accent text-base" : "text-muted-foreground"}`}>
-              {field.label}
-            </label>
-            <p className="text-xs text-muted-foreground mb-2">{field.helper}</p>
-            <textarea
-              value={values[field.key]}
-              onChange={(e) => setValues((v) => ({ ...v, [field.key]: e.target.value }))}
-              rows={field.special ? 2 : 4}
-              className={`w-full bg-background border-l-2 ${field.special ? "border-accent text-lg" : "border-transparent focus:border-accent"} rounded-none px-4 py-3 text-foreground resize-none focus:outline-none transition-colors`}
-            />
+        {/* TITLE INPUT */}
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Give your story a title"
+          maxLength={70}
+          className="w-full bg-transparent text-2xl font-bold text-[#F5F0E8] tracking-tight placeholder:text-[#333] border-none outline-none mb-6"
+        />
+
+        {/* ONE-LINER BOX — editable, matches view layout */}
+        <div className="w-full bg-[#F5F0E8] mb-6 px-6 py-4 focus-within:bg-[#C8A96E] transition-colors">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-[#0A0A0A]/50 mb-2 font-bold">
+            One-Liner
+          </p>
+          <input
+            type="text"
+            value={values.the_one_liner}
+            onChange={(e) => setValues(v => ({ ...v, the_one_liner: e.target.value }))}
+            placeholder="DISTIL IT TO ONE SENTENCE"
+            maxLength={80}
+            className="w-full bg-transparent text-base font-bold text-[#0A0A0A] uppercase italic text-center outline-none placeholder:text-[#0A0A0A]/30"
+          />
+        </div>
+
+        {/* BENTO GRID */}
+        <div className="w-full" style={{ containerType: 'inline-size' }}>
+
+          {/* ROW 1 — Event + Pivot */}
+          <div className="flex" style={{ height: '28cqw' }}>
+
+            {/* THE EVENT */}
+            <div className="relative w-1/2 border-t border-l border-[#2A2A2A] overflow-hidden transition-colors focus-within:border-[#444]"
+                 style={{ padding: '2.5cqw' }}>
+              <span
+                className="absolute bg-[#0A0A0A] font-bold uppercase tracking-[0.2em] text-[#888]"
+                style={{ top: '-0.85cqw', left: '2cqw', padding: '0 0.8cqw', fontSize: '1.2cqw' }}>
+                The Event
+              </span>
+              <textarea
+                maxLength={120}
+                value={values.the_event}
+                onChange={(e) => setValues(v => ({ ...v, the_event: e.target.value }))}
+                placeholder="What happened?"
+                className="h-full w-full resize-none bg-transparent text-[#F5F0E8] font-medium leading-snug outline-none overflow-hidden placeholder:text-[#2A2A2A]"
+                style={{ paddingTop: '1.5cqw', fontSize: '2cqw' }}
+              />
+            </div>
+
+            {/* THE PIVOT */}
+            <div className="relative w-1/2 border-t border-l border-r border-[#2A2A2A] overflow-hidden transition-colors focus-within:border-[#444]"
+                 style={{ padding: '2.5cqw' }}>
+              <span
+                className="absolute bg-[#0A0A0A] font-bold uppercase tracking-[0.2em] text-[#888]"
+                style={{ top: '-0.85cqw', left: '2cqw', padding: '0 0.8cqw', fontSize: '1.2cqw' }}>
+                The Pivot
+              </span>
+              <textarea
+                maxLength={120}
+                value={values.the_pivot}
+                onChange={(e) => setValues(v => ({ ...v, the_pivot: e.target.value }))}
+                placeholder="What was the first move?"
+                className="h-full w-full resize-none bg-transparent text-[#F5F0E8] font-medium leading-snug outline-none overflow-hidden placeholder:text-[#2A2A2A]"
+                style={{ paddingTop: '1.5cqw', fontSize: '2cqw' }}
+              />
+            </div>
           </div>
-        ))}
-      </div>
 
-      <div className="sticky bottom-0 bg-background border-t border-border py-4 mt-8 flex items-center justify-end gap-3">
-        <Button variant="ghost" onClick={() => handleSave(false)} disabled={saving}>
-          Save Draft
-        </Button>
-        <Button variant="accentFill" onClick={() => handleSave(true)} disabled={saving}>
-          Publish Afterframe
-        </Button>
+          {/* ROW 2 — Gut-Punch + Retroactive Why */}
+          <div className="grid border-t border-[#2A2A2A]"
+               style={{ gridTemplateColumns: '5fr 9fr', height: '38cqw' }}>
+
+            {/* THE GUT-PUNCH */}
+            <div className="relative flex flex-col overflow-hidden bg-[#141414] transition-all focus-within:bg-[#1A1212]"
+                 style={{
+                   borderLeft: '3px solid #8B3A3A',
+                   borderRight: '1px solid #2A2A2A',
+                   padding: '2.5cqw'
+                 }}>
+              <span className="font-bold uppercase tracking-[0.2em] text-[#8B3A3A] shrink-0"
+                    style={{ fontSize: '1.3cqw', marginBottom: '1.2cqw' }}>
+                Gut-Punch
+              </span>
+              <div className="shrink-0 bg-[#8B3A3A]/30"
+                   style={{ height: '1px', width: '5cqw', marginBottom: '1.5cqw' }} />
+              <textarea
+                maxLength={100}
+                value={values.the_gut_punch}
+                onChange={(e) => setValues(v => ({ ...v, the_gut_punch: e.target.value }))}
+                placeholder="How did it feel?"
+                className="h-full w-full resize-none bg-transparent text-[#F5F0E8]/80 italic font-medium leading-snug outline-none overflow-hidden placeholder:text-[#8B3A3A]/20"
+                style={{ fontSize: '1.8cqw' }}
+              />
+            </div>
+
+            {/* THE RETROACTIVE WHY */}
+            <div className="relative flex flex-col justify-center overflow-hidden text-center transition-all focus-within:border-[#C8A96E]/50"
+                 style={{
+                   border: '1px solid rgba(200,169,110,0.2)',
+                   borderLeft: 'none',
+                   padding: '4cqw'
+                 }}>
+              <div className="absolute top-0 left-0 border-[#C8A96E]"
+                   style={{ width: '3cqw', height: '3cqw', borderTop: '2px solid', borderLeft: '2px solid' }} />
+              <div className="absolute bottom-0 right-0 border-[#C8A96E]"
+                   style={{ width: '3cqw', height: '3cqw', borderBottom: '2px solid', borderRight: '2px solid' }} />
+              <span className="block font-bold uppercase tracking-[0.4em] text-[#C8A96E]"
+                    style={{ fontSize: '1.3cqw', marginBottom: '2cqw' }}>
+                Retroactive Why
+              </span>
+              <textarea
+                maxLength={200}
+                value={values.the_retroactive_why}
+                onChange={(e) => setValues(v => ({ ...v, the_retroactive_why: e.target.value }))}
+                placeholder="What truth can't you unsee now?"
+                className="w-full resize-none bg-transparent text-center text-[#F5F0E8] font-semibold tracking-tight leading-snug outline-none overflow-hidden placeholder:text-[#C8A96E]/10"
+                style={{ fontSize: '2.4cqw', height: '55%' }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* STICKY FOOTER */}
+        <div className="sticky bottom-0 bg-[#0A0A0A] border-t border-[#2A2A2A] py-4 mt-6 flex items-center justify-end gap-3">
+          <Button variant="ghost" onClick={() => handleSave(false)} disabled={saving}>
+            Save Draft
+          </Button>
+          <Button variant="accentFill" onClick={() => handleSave(true)} disabled={saving}>
+            Publish Afterframe
+          </Button>
+        </div>
+
       </div>
     </div>
   );

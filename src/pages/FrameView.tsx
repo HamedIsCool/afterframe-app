@@ -114,86 +114,174 @@ const FrameView = () => {
   if (!frame) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Not found</div>;
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-2xl">
-      <h1 className="text-3xl font-bold text-foreground mb-4">{frame.title}</h1>
-      
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-muted border border-border flex items-center justify-center text-sm text-muted-foreground overflow-hidden">
-            {author?.avatar_url ? (
-              <img src={author.avatar_url} alt="" className="w-full h-full object-cover" />
-            ) : (
-              author?.username?.charAt(0).toUpperCase()
+    <div className="min-h-screen bg-[#0A0A0A] py-10 px-4 font-['Space_Grotesk']">
+      <div className="w-full max-w-[640px] mx-auto">
+
+        {/* TITLE */}
+        <h1 className="text-2xl font-bold text-[#F5F0E8] tracking-tight mb-6 leading-snug">
+          {frame.title}
+        </h1>
+
+        {/* AUTHOR ROW */}
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-[#1A1A1A] border border-[#2A2A2A] flex items-center justify-center text-sm text-[#888] overflow-hidden shrink-0">
+              {author?.avatar_url
+                ? <img src={author.avatar_url} alt="" className="w-full h-full object-cover" />
+                : author?.username?.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <p className="text-sm text-[#F5F0E8] font-medium">{author?.username}</p>
+              <p className="text-xs text-[#888]">
+                {frame.published_at && formatDistanceToNow(new Date(frame.published_at), { addSuffix: true })}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <button onClick={toggleLike} className={`flex items-center gap-1 text-sm transition-colors ${liked ? "text-[#C8A96E]" : "text-[#888] hover:text-[#F5F0E8]"}`}>
+              <Heart size={16} fill={liked ? "currentColor" : "none"} /> {likeCount}
+            </button>
+            <button onClick={toggleSave} className={`transition-colors ${saved ? "text-[#C8A96E]" : "text-[#888] hover:text-[#F5F0E8]"}`}>
+              <Bookmark size={16} fill={saved ? "currentColor" : "none"} />
+            </button>
+            <span className="flex items-center gap-1 text-sm text-[#888]">
+              <MessageSquare size={16} /> {comments.length}
+            </span>
+          </div>
+        </div>
+
+        {/* ONE-LINER BOX */}
+        <div className="w-full bg-[#F5F0E8] mb-6 px-6 py-4">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-[#0A0A0A]/50 mb-2 font-bold">
+            One-Liner
+          </p>
+          <p className="text-base font-bold text-[#0A0A0A] uppercase italic leading-snug text-center">
+            {frame.the_one_liner}
+          </p>
+        </div>
+
+        {/* BENTO GRID */}
+        <div className="w-full" style={{ containerType: 'inline-size' }}>
+
+          {/* ROW 1 — Event + Pivot */}
+          <div className="flex" style={{ height: '28cqw' }}>
+
+            {/* THE EVENT */}
+            <div className="relative w-1/2 border-t border-l border-[#2A2A2A] overflow-hidden"
+                 style={{ padding: '2.5cqw' }}>
+              <span
+                className="absolute bg-[#0A0A0A] font-bold uppercase tracking-[0.2em] text-[#888]"
+                style={{ top: '-0.85cqw', left: '2cqw', padding: '0 0.8cqw', fontSize: '1.2cqw' }}>
+                The Event
+              </span>
+              <p className="text-[#F5F0E8] font-medium leading-snug overflow-hidden"
+                 style={{ paddingTop: '1.5cqw', fontSize: '2cqw', maxHeight: '100%' }}>
+                {frame.the_event}
+              </p>
+            </div>
+
+            {/* THE PIVOT */}
+            <div className="relative w-1/2 border-t border-l border-r border-[#2A2A2A] overflow-hidden"
+                 style={{ padding: '2.5cqw' }}>
+              <span
+                className="absolute bg-[#0A0A0A] font-bold uppercase tracking-[0.2em] text-[#888]"
+                style={{ top: '-0.85cqw', left: '2cqw', padding: '0 0.8cqw', fontSize: '1.2cqw' }}>
+                The Pivot
+              </span>
+              <p className="text-[#F5F0E8] font-medium leading-snug overflow-hidden"
+                 style={{ paddingTop: '1.5cqw', fontSize: '2cqw', maxHeight: '100%' }}>
+                {frame.the_pivot}
+              </p>
+            </div>
+          </div>
+
+          {/* ROW 2 — Gut-Punch + Retroactive Why */}
+          <div className="grid border-t border-[#2A2A2A]"
+               style={{ gridTemplateColumns: '5fr 9fr', height: '38cqw' }}>
+
+            {/* THE GUT-PUNCH */}
+            <div className="relative flex flex-col overflow-hidden bg-[#141414]"
+                 style={{
+                   borderLeft: '3px solid #8B3A3A',
+                   borderRight: '1px solid #2A2A2A',
+                   padding: '2.5cqw'
+                 }}>
+              <span className="font-bold uppercase tracking-[0.2em] text-[#8B3A3A] shrink-0"
+                    style={{ fontSize: '1.3cqw', marginBottom: '1.2cqw' }}>
+                Gut-Punch
+              </span>
+              <div className="shrink-0 bg-[#8B3A3A]/30"
+                   style={{ height: '1px', width: '5cqw', marginBottom: '1.5cqw' }} />
+              <p className="text-[#F5F0E8]/80 italic font-medium leading-snug overflow-hidden"
+                 style={{ fontSize: '1.8cqw' }}>
+                {frame.the_gut_punch}
+              </p>
+            </div>
+
+            {/* THE RETROACTIVE WHY */}
+            <div className="relative flex flex-col justify-center overflow-hidden text-center"
+                 style={{
+                   border: '1px solid rgba(200,169,110,0.2)',
+                   borderLeft: 'none',
+                   padding: '4cqw'
+                 }}>
+              <div className="absolute top-0 left-0 border-[#C8A96E]"
+                   style={{ width: '3cqw', height: '3cqw', borderTop: '2px solid', borderLeft: '2px solid' }} />
+              <div className="absolute bottom-0 right-0 border-[#C8A96E]"
+                   style={{ width: '3cqw', height: '3cqw', borderBottom: '2px solid', borderRight: '2px solid' }} />
+              <span className="block font-bold uppercase tracking-[0.4em] text-[#C8A96E]"
+                    style={{ fontSize: '1.3cqw', marginBottom: '2cqw' }}>
+                Retroactive Why
+              </span>
+              <p className="font-semibold tracking-tight text-[#F5F0E8] leading-snug overflow-hidden"
+                 style={{ fontSize: '2.4cqw' }}>
+                {frame.the_retroactive_why}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* COMMENTS */}
+        <div className="mt-12 border-t border-[#2A2A2A] pt-8">
+          <h2 className="text-base font-semibold text-[#F5F0E8] mb-4 uppercase tracking-widest text-sm">
+            Comments
+          </h2>
+          {user && (
+            <div className="flex gap-2 mb-6">
+              <input
+                type="text"
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                placeholder="Add a comment..."
+                className="flex-1 bg-[#141414] border border-[#2A2A2A] px-3 py-2 text-sm text-[#F5F0E8] placeholder:text-[#555] focus:outline-none focus:border-[#C8A96E] transition-colors"
+                onKeyDown={(e) => e.key === 'Enter' && addComment()}
+              />
+              <Button variant="accentFill" size="sm" onClick={addComment}>Post</Button>
+            </div>
+          )}
+          <div className="space-y-4">
+            {comments.map((c: any) => (
+              <div key={c.id} className="flex gap-3">
+                <div className="w-7 h-7 bg-[#1A1A1A] border border-[#2A2A2A] flex items-center justify-center text-xs text-[#888] shrink-0">
+                  {c.author?.username?.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-[#F5F0E8]">{c.author?.username}</span>
+                    <span className="text-xs text-[#888]">
+                      {formatDistanceToNow(new Date(c.created_at), { addSuffix: true })}
+                    </span>
+                  </div>
+                  <p className="text-sm text-[#888] mt-1">{c.content}</p>
+                </div>
+              </div>
+            ))}
+            {comments.length === 0 && (
+              <p className="text-sm text-[#555]">No comments yet. Be the first.</p>
             )}
           </div>
-          <div>
-            <p className="text-sm text-foreground font-medium">{author?.username}</p>
-            <p className="text-xs text-muted-foreground">
-              {frame.published_at && formatDistanceToNow(new Date(frame.published_at), { addSuffix: true })}
-            </p>
-          </div>
         </div>
-        <div className="flex items-center gap-4">
-          <button onClick={toggleLike} className={`flex items-center gap-1 text-sm transition-colors ${liked ? "text-accent" : "text-muted-foreground hover:text-foreground"}`}>
-            <Heart size={18} fill={liked ? "currentColor" : "none"} /> {likeCount}
-          </button>
-          <button onClick={toggleSave} className={`transition-colors ${saved ? "text-accent" : "text-muted-foreground hover:text-foreground"}`}>
-            <Bookmark size={18} fill={saved ? "currentColor" : "none"} />
-          </button>
-          <span className="flex items-center gap-1 text-sm text-muted-foreground">
-            <MessageSquare size={18} /> {comments.length}
-          </span>
-        </div>
-      </div>
 
-      <div className="space-y-6">
-        {frameFields.map((field) => (
-          <div
-            key={field.key}
-            className={`border-l-2 pl-4 py-3 ${field.special ? "border-l-0 border-t-2 border-accent pt-4" : "border-border"}`}
-          >
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">{field.label}</p>
-            {!field.special && <div className="border-b border-border mb-3" />}
-            <p className={field.special ? "text-xl font-bold text-accent" : "text-foreground leading-relaxed"} style={{ fontSize: field.special ? "1.4rem" : "1.1rem" }}>
-              {(frame as any)[field.key]}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      {/* Comments */}
-      <div className="mt-12 border-t border-border pt-8">
-        <h2 className="text-lg font-semibold text-foreground mb-4">Comments</h2>
-        {user && (
-          <div className="flex gap-2 mb-6">
-            <input
-              type="text"
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-              placeholder="Add a comment..."
-              className="flex-1 bg-secondary border border-border rounded-sm px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent"
-              onKeyDown={(e) => e.key === "Enter" && addComment()}
-            />
-            <Button variant="accentFill" size="sm" onClick={addComment}>Post</Button>
-          </div>
-        )}
-        <div className="space-y-4">
-          {comments.map((c: any) => (
-            <div key={c.id} className="flex gap-3">
-              <div className="w-8 h-8 rounded-full bg-muted border border-border flex items-center justify-center text-xs text-muted-foreground shrink-0">
-                {c.author?.username?.charAt(0).toUpperCase()}
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-foreground">{c.author?.username}</span>
-                  <span className="text-xs text-muted-foreground">{formatDistanceToNow(new Date(c.created_at), { addSuffix: true })}</span>
-                </div>
-                <p className="text-sm text-foreground mt-1">{c.content}</p>
-              </div>
-            </div>
-          ))}
-          {comments.length === 0 && <p className="text-sm text-muted-foreground">No comments yet.</p>}
-        </div>
       </div>
     </div>
   );

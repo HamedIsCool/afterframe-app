@@ -17,6 +17,7 @@ import ProfilePage from "@/pages/ProfilePage";
 import Dashboard from "@/pages/Dashboard";
 import SavedPage from "@/pages/SavedPage";
 import Notifications from "@/pages/Notifications";
+import TheoryPage from "@/pages/TheoryPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/saved" element={<ProtectedRoute><SavedPage /></ProtectedRoute>} />
             <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+            <Route path="/theory" element={<TheoryPage />} />
             <Route path="/:username" element={<ProfilePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
