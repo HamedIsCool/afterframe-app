@@ -42,7 +42,11 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
     const payload = {
       author_id: user.id,
       title,
-      ...values,
+      the_event: values.the_event,
+      the_gut_punch: values.the_gut_punch,
+      the_pivot: values.the_pivot,
+      the_retroactive_why: values.the_retroactive_why,
+      the_one_liner: values.the_one_liner,
       is_published: publish,
       ...(publish ? { published_at: new Date().toISOString() } : {}),
     };
