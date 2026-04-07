@@ -100,42 +100,46 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
         <div className="w-full" style={{ containerType: 'inline-size' }}>
 
           {/* ROW 1 — Event + Pivot */}
-          <div className="flex" style={{ height: '28cqw' }}>
+          <div className="flex" style={{ height: '28cqw', overflow: 'visible' }}>
 
             {/* THE EVENT */}
-            <div className="relative w-1/2 border-t border-l border-[#2A2A2A] overflow-hidden transition-colors focus-within:border-[#444]"
+            <div className="relative w-1/2 border-t border-l border-[#2A2A2A] transition-colors focus-within:border-[#444]"
                  style={{ padding: '2.5cqw' }}>
               <span
                 className="absolute bg-[#0A0A0A] font-bold uppercase tracking-[0.2em] text-[#888]"
-                style={{ top: '-0.85cqw', left: '2cqw', padding: '0 0.8cqw', fontSize: '1.2cqw' }}>
+                style={{ top: '-0.9cqw', left: '2cqw', padding: '0 0.8cqw', fontSize: '1.2cqw', zIndex: 10 }}>
                 The Event
               </span>
-              <textarea
-                maxLength={120}
-                value={values.the_event}
-                onChange={(e) => setValues(v => ({ ...v, the_event: e.target.value }))}
-                placeholder="What happened?"
-                className="h-full w-full resize-none bg-transparent text-[#F5F0E8] font-medium leading-snug outline-none overflow-hidden placeholder:text-[#2A2A2A]"
-                style={{ paddingTop: '1.5cqw', fontSize: '2cqw' }}
-              />
+              <div style={{ overflow: 'hidden', height: '100%', paddingTop: '1.5cqw' }}>
+                <textarea
+                  maxLength={120}
+                  value={values.the_event}
+                  onChange={(e) => setValues(v => ({ ...v, the_event: e.target.value }))}
+                  placeholder="What happened?"
+                  className="h-full w-full resize-none bg-transparent text-[#F5F0E8] font-medium leading-snug outline-none placeholder:text-[#2A2A2A]"
+                  style={{ fontSize: '2cqw' }}
+                />
+              </div>
             </div>
 
             {/* THE PIVOT */}
-            <div className="relative w-1/2 border-t border-l border-r border-[#2A2A2A] overflow-hidden transition-colors focus-within:border-[#444]"
+            <div className="relative w-1/2 border-t border-l border-r border-[#2A2A2A] transition-colors focus-within:border-[#444]"
                  style={{ padding: '2.5cqw' }}>
               <span
                 className="absolute bg-[#0A0A0A] font-bold uppercase tracking-[0.2em] text-[#888]"
-                style={{ top: '-0.85cqw', left: '2cqw', padding: '0 0.8cqw', fontSize: '1.2cqw' }}>
+                style={{ top: '-0.9cqw', left: '2cqw', padding: '0 0.8cqw', fontSize: '1.2cqw', zIndex: 10 }}>
                 The Pivot
               </span>
-              <textarea
-                maxLength={120}
-                value={values.the_pivot}
-                onChange={(e) => setValues(v => ({ ...v, the_pivot: e.target.value }))}
-                placeholder="What was the first move?"
-                className="h-full w-full resize-none bg-transparent text-[#F5F0E8] font-medium leading-snug outline-none overflow-hidden placeholder:text-[#2A2A2A]"
-                style={{ paddingTop: '1.5cqw', fontSize: '2cqw' }}
-              />
+              <div style={{ overflow: 'hidden', height: '100%', paddingTop: '1.5cqw' }}>
+                <textarea
+                  maxLength={120}
+                  value={values.the_pivot}
+                  onChange={(e) => setValues(v => ({ ...v, the_pivot: e.target.value }))}
+                  placeholder="What was the first move?"
+                  className="h-full w-full resize-none bg-transparent text-[#F5F0E8] font-medium leading-snug outline-none placeholder:text-[#2A2A2A]"
+                  style={{ fontSize: '2cqw' }}
+                />
+              </div>
             </div>
           </div>
 

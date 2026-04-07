@@ -36,31 +36,71 @@ const TheoryPage = () => (
         </p>
       </div>
 
-      <div className="w-full my-14 overflow-hidden">
-        <svg width="100%" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg">
-          <line x1="64" y1="30" x2="64" y2="320" stroke="#2A2A2A" strokeWidth="0.5"/>
-          <line x1="64" y1="320" x2="640" y2="320" stroke="#2A2A2A" strokeWidth="0.5"/>
-          <text x="30" y="175" fontSize="11" fill="#555" textAnchor="middle" transform="rotate(-90 30 175)" fontFamily="Space Grotesk, sans-serif">Clarity</text>
-          <text x="352" y="348" fontSize="11" fill="#555" textAnchor="middle" fontFamily="Space Grotesk, sans-serif">Time</text>
-          <path d="M64 190 C100 188, 140 186, 165 188 C180 190, 195 200, 210 250 C222 290, 230 308, 248 312 C268 316, 288 310, 310 295 C340 275, 370 240, 405 195 C435 158, 460 120, 500 88 C520 72, 545 60, 580 54" fill="none" stroke="#C8A96E" strokeWidth="2" strokeLinecap="round"/>
-          <circle cx="190" cy="222" r="5" fill="#C8A96E"/>
-          <circle cx="248" cy="312" r="5" fill="#8B3A3A"/>
-          <circle cx="335" cy="272" r="5" fill="#555"/>
-          <circle cx="450" cy="130" r="5" fill="#C8A96E" opacity="0.6"/>
-          <circle cx="568" cy="58" r="7" fill="#F5F0E8" stroke="#C8A96E" strokeWidth="1.5"/>
-          <line x1="190" y1="224" x2="190" y2="320" stroke="#2A2A2A" strokeWidth="0.5" strokeDasharray="3 3"/>
-          <line x1="248" y1="314" x2="248" y2="320" stroke="#8B3A3A" strokeWidth="0.5" strokeDasharray="3 3"/>
-          <line x1="335" y1="274" x2="335" y2="320" stroke="#2A2A2A" strokeWidth="0.5" strokeDasharray="3 3"/>
-          <line x1="568" y1="60" x2="568" y2="320" stroke="#C8A96E" strokeWidth="0.5" strokeDasharray="3 3" opacity="0.4"/>
-          <text x="190" y="338" fontSize="11" fill="#C8A96E" textAnchor="middle" fontFamily="Space Grotesk, sans-serif">The Event</text>
-          <text x="248" y="338" fontSize="11" fill="#8B3A3A" textAnchor="middle" fontFamily="Space Grotesk, sans-serif">Gut-Punch</text>
-          <text x="335" y="338" fontSize="11" fill="#555" textAnchor="middle" fontFamily="Space Grotesk, sans-serif">The Pivot</text>
-          <text x="568" y="338" fontSize="11" fill="#C8A96E" textAnchor="middle" fontFamily="Space Grotesk, sans-serif">One-Liner</text>
-          <text x="420" y="108" fontSize="11" fill="#555" fontFamily="Space Grotesk, sans-serif">Retroactive</text>
-          <text x="420" y="120" fontSize="11" fill="#555" fontFamily="Space Grotesk, sans-serif">Why</text>
-          <text x="340" y="390" fontSize="10" fill="#333" textAnchor="middle" fontStyle="italic" fontFamily="Space Grotesk, sans-serif">"Life can only be understood backwards; but it must be lived forwards." — Kierkegaard</text>
-        </svg>
-      </div>
+      <div className="w-full my-14">
+  <div style={{
+    background: '#f5f0e8',
+    border: '1px solid #2A2A2A',
+    padding: '2.5rem 1.5rem 2rem'
+  }}>
+    <svg width="100%" viewBox="0 0 680 460"
+         xmlns="http://www.w3.org/2000/svg"
+         style={{ fontFamily: "'Space Grotesk', sans-serif", display: 'block' }}>
+
+      <line x1="64" y1="24" x2="64" y2="310" stroke="#333" strokeWidth="0.5"/>
+      <line x1="64" y1="310" x2="650" y2="310" stroke="#333" strokeWidth="0.5"/>
+      <path d="M60 28 L64 20 L68 28" fill="none" stroke="#333" strokeWidth="0.5"/>
+      <path d="M644 306 L652 310 L644 314" fill="none" stroke="#333" strokeWidth="0.5"/>
+
+      <text x="28" y="170" fontSize="11" fill="#444" textAnchor="middle"
+            transform="rotate(-90 28 170)">Clarity / Sense-making</text>
+      <text x="357" y="380" fontSize="11" fill="#444" textAnchor="middle">Time</text>
+
+      <path
+        d="M64 196 C95 194, 130 192, 155 193 C172 194, 188 204, 205 240 C218 262, 228 272, 246 268 C264 264, 284 258, 306 248 C336 234, 366 210, 402 180 C432 153, 460 112, 498 80 C522 60, 548 46, 590 36"
+        fill="none" stroke="#C8A96E" strokeWidth="1.5" strokeLinecap="round"
+      />
+
+      <circle cx="190" cy="214" r="4.5" fill="#C8A96E"/>
+      <circle cx="246" cy="268" r="4.5" fill="#8B3A3A"/>
+      <circle cx="332" cy="234" r="4.5" fill="#555"/>
+      <circle cx="462" cy="115" r="4.5" fill="#C8A96E"/>
+      <circle cx="578" cy="39" r="6" fill="#F5F0E8" stroke="#C8A96E" strokeWidth="1.5"/>
+
+      <line x1="190" y1="220" x2="190" y2="310" stroke="#2A2A2A" strokeWidth="0.5" strokeDasharray="3 4"/>
+      <line x1="246" y1="275" x2="246" y2="310" stroke="#8B3A3A" strokeWidth="0.5" strokeDasharray="3 4"/>
+      <line x1="332" y1="244" x2="332" y2="310" stroke="#2A2A2A" strokeWidth="0.5" strokeDasharray="3 4"/>
+      <line x1="462" y1="125" x2="462" y2="310" stroke="#2A2A2A" strokeWidth="0.5" strokeDasharray="3 4" opacity="0.3"/>
+      <line x1="578" y1="53" x2="578" y2="310" stroke="#C8A96E" strokeWidth="0.5" strokeDasharray="3 4" opacity="0.9"/>
+
+      <text x="148" y="336" fontSize="10.5" fill="#C8A96E" textAnchor="middle"
+            fontWeight="600" letterSpacing="0.06em">THE EVENT</text>
+
+      <text x="244" y="336" fontSize="10.5" fill="#8B3A3A" textAnchor="middle"
+            fontWeight="600" letterSpacing="0.06em">GUT-PUNCH</text>
+
+      <text x="342" y="336" fontSize="10.5" fill="#666" textAnchor="middle"
+            fontWeight="600" letterSpacing="0.06em">THE PIVOT</text>
+
+      <text x="462" y="336" fontSize="10.5" fill="#888" textAnchor="middle"
+            fontWeight="500" letterSpacing="0.04em">RETROACTIVE</text>
+      <text x="462" y="349" fontSize="10.5" fill="#888" textAnchor="middle"
+            fontWeight="500" letterSpacing="0.04em">WHY</text>
+
+      <text x="578" y="336" fontSize="10.5" fill="#C8A96E" textAnchor="middle"
+            fontWeight="600" letterSpacing="0.06em">ONE-LINER</text>
+
+      <text x="110" y="184" fontSize="10" fill="#333" textAnchor="middle">stable before</text>
+      <text x="592" y="28" fontSize="10" fill="#C8A96E" textAnchor="start">clarity</text>
+      <text x="398" y="84" fontSize="10" fill="#555" textAnchor="middle">why it had</text>
+      <text x="398" y="96" fontSize="10" fill="#555" textAnchor="middle">to happen</text>
+
+      <text x="340" y="432" fontSize="10" fill="#333" textAnchor="middle"
+            fontStyle="italic">
+        "Life can only be understood backwards; but it must be lived forwards." - Kierkegaard
+      </text>
+    </svg>
+  </div>
+</div>
 
       {/* Section 2 */}
       <div className="mb-12">
