@@ -68,141 +68,220 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] py-10 px-4 font-['Space_Grotesk']">
-      <div className="w-full max-w-[640px] mx-auto">
+    <div className="min-h-screen bg-[#0A0A0A] py-10 px-4 
+                  font-['Space_Grotesk']">
+      <div className="w-full max-w-[720px] mx-auto">
 
-        {/* TITLE INPUT */}
+        {/* TITLE */}
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Give your story a title"
           maxLength={70}
-          className="w-full bg-transparent text-2xl font-bold text-[#F5F0E8] tracking-tight placeholder:text-[#333] border-none outline-none mb-6"
+          className="w-full bg-transparent text-3xl font-bold 
+                     text-[#F5F0E8] tracking-tight 
+                     placeholder:text-[#333] border-none 
+                     outline-none mb-8 leading-snug"
         />
 
-        {/* ONE-LINER BOX — editable, matches view layout */}
-        <div className="w-full bg-[#F5F0E8] mb-6 px-6 py-4 focus-within:bg-[#C8A96E] transition-colors">
-          <p className="text-[10px] uppercase tracking-[0.2em] text-[#0A0A0A]/50 mb-2 font-bold">
-            One-Liner
-          </p>
-          <input
-            type="text"
-            value={values.the_one_liner}
-            onChange={(e) => setValues(v => ({ ...v, the_one_liner: e.target.value }))}
-            placeholder="DISTIL IT TO ONE SENTENCE"
-            maxLength={80}
-            className="w-full bg-transparent text-base font-bold text-[#0A0A0A] uppercase italic text-center outline-none placeholder:text-[#0A0A0A]/30"
-          />
-        </div>
-
         {/* BENTO GRID */}
-        <div className="w-full" style={{ containerType: 'inline-size' }}>
+        <div className="w-full border border-[#2A2A2A]">
 
           {/* ROW 1 — Event + Pivot */}
-          <div className="flex" style={{ height: '28cqw', overflow: 'visible' }}>
+          <div className="flex flex-col md:flex-row 
+                        border-b border-[#2A2A2A]">
 
             {/* THE EVENT */}
-            <div className="relative w-1/2 border-t border-l border-[#2A2A2A] transition-colors focus-within:border-[#444]"
-                 style={{ padding: '2.5cqw' }}>
-              <span
-                className="absolute bg-[#0A0A0A] font-bold uppercase tracking-[0.2em] text-[#888]"
-                style={{ top: '-0.9cqw', left: '2cqw', padding: '0 0.8cqw', fontSize: '1.2cqw', zIndex: 10 }}>
-                The Event
-              </span>
-              <div style={{ overflow: 'hidden', height: '100%', paddingTop: '1.5cqw' }}>
-                <textarea
-                  maxLength={120}
-                  value={values.the_event}
-                  onChange={(e) => setValues(v => ({ ...v, the_event: e.target.value }))}
-                  placeholder="What happened?"
-                  className="h-full w-full resize-none bg-transparent text-[#F5F0E8] font-medium leading-snug outline-none placeholder:text-[#2A2A2A]"
-                  style={{ fontSize: '2cqw' }}
-                />
+            <div className="relative w-full md:w-1/2 
+                          border-b md:border-b-0 
+                          md:border-r border-[#2A2A2A] 
+                          p-6 min-h-[180px] 
+                          focus-within:bg-[#0F0F0F] 
+                          transition-colors">
+              <div className="flex items-center 
+                              justify-between mb-3">
+                <label className="text-xs font-bold uppercase 
+                                  tracking-[0.2em] text-[#555]">
+                  The Event
+                </label>
+                <span className="text-xs text-[#333] tabular-nums">
+                  {values.the_event.length}/120
+                </span>
               </div>
+              <textarea
+                maxLength={120}
+                value={values.the_event}
+                onChange={(e) => setValues(v => ({ 
+                  ...v, the_event: e.target.value 
+                }))}
+                placeholder="What happened?"
+                className="w-full h-[120px] resize-none 
+                           bg-transparent text-[#F5F0E8] 
+                           font-medium leading-relaxed 
+                           text-base outline-none 
+                           placeholder:text-[#2A2A2A]"
+              />
             </div>
 
             {/* THE PIVOT */}
-            <div className="relative w-1/2 border-t border-l border-r border-[#2A2A2A] transition-colors focus-within:border-[#444]"
-                 style={{ padding: '2.5cqw' }}>
-              <span
-                className="absolute bg-[#0A0A0A] font-bold uppercase tracking-[0.2em] text-[#888]"
-                style={{ top: '-0.9cqw', left: '2cqw', padding: '0 0.8cqw', fontSize: '1.2cqw', zIndex: 10 }}>
-                The Pivot
-              </span>
-              <div style={{ overflow: 'hidden', height: '100%', paddingTop: '1.5cqw' }}>
-                <textarea
-                  maxLength={120}
-                  value={values.the_pivot}
-                  onChange={(e) => setValues(v => ({ ...v, the_pivot: e.target.value }))}
-                  placeholder="What was the first move?"
-                  className="h-full w-full resize-none bg-transparent text-[#F5F0E8] font-medium leading-snug outline-none placeholder:text-[#2A2A2A]"
-                  style={{ fontSize: '2cqw' }}
-                />
+            <div className="relative w-full md:w-1/2 
+                          p-6 min-h-[180px] 
+                          focus-within:bg-[#0F0F0F] 
+                          transition-colors">
+              <div className="flex items-center 
+                              justify-between mb-3">
+                <label className="text-xs font-bold uppercase 
+                                  tracking-[0.2em] text-[#555]">
+                  The Pivot
+                </label>
+                <span className="text-xs text-[#333] tabular-nums">
+                  {values.the_pivot.length}/120
+                </span>
               </div>
+              <textarea
+                maxLength={120}
+                value={values.the_pivot}
+                onChange={(e) => setValues(v => ({ 
+                  ...v, the_pivot: e.target.value 
+                }))}
+                placeholder="What was the first move?"
+                className="w-full h-[120px] resize-none 
+                           bg-transparent text-[#F5F0E8] 
+                           font-medium leading-relaxed 
+                           text-base outline-none 
+                           placeholder:text-[#2A2A2A]"
+              />
             </div>
           </div>
 
           {/* ROW 2 — Gut-Punch + Retroactive Why */}
-          <div className="grid border-t border-[#2A2A2A]"
-               style={{ gridTemplateColumns: '5fr 9fr', height: '38cqw' }}>
+          <div className="flex flex-col md:flex-row">
 
             {/* THE GUT-PUNCH */}
-            <div className="relative flex flex-col overflow-hidden bg-[#141414] transition-all focus-within:bg-[#1A1212]"
-                 style={{
-                   borderLeft: '3px solid #8B3A3A',
-                   borderRight: '1px solid #2A2A2A',
-                   padding: '2.5cqw'
-                 }}>
-              <span className="font-bold uppercase tracking-[0.2em] text-[#8B3A3A] shrink-0"
-                    style={{ fontSize: '1.3cqw', marginBottom: '1.2cqw' }}>
-                Gut-Punch
-              </span>
-              <div className="shrink-0 bg-[#8B3A3A]/30"
-                   style={{ height: '1px', width: '5cqw', marginBottom: '1.5cqw' }} />
+            <div className="w-full md:w-[38%] 
+                          border-b md:border-b-0 
+                          md:border-r border-[#2A2A2A] 
+                          bg-[#141414] p-6 min-h-[200px]
+                          focus-within:bg-[#1A1212] 
+                          transition-colors"
+                 style={{ borderLeft: '3px solid #8B3A3A' }}>
+              <div className="flex items-center 
+                              justify-between mb-3">
+                <label className="text-xs font-bold uppercase 
+                                  tracking-[0.2em] text-[#8B3A3A]">
+                  Gut-Punch
+                </label>
+                <span className="text-xs text-[#8B3A3A]/40 
+                                 tabular-nums">
+                  {values.the_gut_punch.length}/100
+                </span>
+              </div>
+              <div className="w-8 h-px bg-[#8B3A3A]/30 mb-4" />
               <textarea
                 maxLength={100}
                 value={values.the_gut_punch}
-                onChange={(e) => setValues(v => ({ ...v, the_gut_punch: e.target.value }))}
+                onChange={(e) => setValues(v => ({ 
+                  ...v, the_gut_punch: e.target.value 
+                }))}
                 placeholder="How did it feel?"
-                className="h-full w-full resize-none bg-transparent text-[#F5F0E8]/80 italic font-medium leading-snug outline-none overflow-hidden placeholder:text-[#8B3A3A]/20"
-                style={{ fontSize: '1.8cqw' }}
+                className="w-full h-[120px] resize-none 
+                           bg-transparent text-[#F5F0E8]/80 
+                           italic font-medium leading-relaxed 
+                           text-base outline-none 
+                           placeholder:text-[#8B3A3A]/20"
               />
             </div>
 
             {/* THE RETROACTIVE WHY */}
-            <div className="relative flex flex-col justify-center overflow-hidden text-center transition-all focus-within:border-[#C8A96E]/50"
-                 style={{
-                   border: '1px solid rgba(200,169,110,0.2)',
+            <div className="relative w-full md:w-[62%] 
+                          p-8 min-h-[200px] 
+                          flex flex-col justify-center 
+                          text-center 
+                          focus-within:border-[#C8A96E]/40 
+                          transition-colors"
+                 style={{ 
+                   border: '1px solid rgba(200,169,110,0.15)',
                    borderLeft: 'none',
-                   padding: '4cqw'
+                   borderTop: 'none'
                  }}>
-              <div className="absolute top-0 left-0 border-[#C8A96E]"
-                   style={{ width: '3cqw', height: '3cqw', borderTop: '2px solid', borderLeft: '2px solid' }} />
-              <div className="absolute bottom-0 right-0 border-[#C8A96E]"
-                   style={{ width: '3cqw', height: '3cqw', borderBottom: '2px solid', borderRight: '2px solid' }} />
-              <span className="block font-bold uppercase tracking-[0.4em] text-[#C8A96E]"
-                    style={{ fontSize: '1.3cqw', marginBottom: '2cqw' }}>
-                Retroactive Why
-              </span>
+              <div className="absolute top-0 left-0 w-6 h-6 
+                              border-t-2 border-l-2 
+                              border-[#C8A96E]" />
+              <div className="absolute bottom-0 right-0 w-6 h-6 
+                              border-b-2 border-r-2 
+                              border-[#C8A96E]" />
+              <div className="flex items-center 
+                              justify-between mb-4">
+                <label className="text-xs font-bold uppercase 
+                                  tracking-[0.3em] text-[#C8A96E]">
+                  Retroactive Why
+                </label>
+                <span className="text-xs text-[#C8A96E]/30 
+                                 tabular-nums">
+                  {values.the_retroactive_why.length}/200
+                </span>
+              </div>
               <textarea
                 maxLength={200}
                 value={values.the_retroactive_why}
-                onChange={(e) => setValues(v => ({ ...v, the_retroactive_why: e.target.value }))}
+                onChange={(e) => setValues(v => ({ 
+                  ...v, the_retroactive_why: e.target.value 
+                }))}
                 placeholder="What truth can't you unsee now?"
-                className="w-full resize-none bg-transparent text-center text-[#F5F0E8] font-semibold tracking-tight leading-snug outline-none overflow-hidden placeholder:text-[#C8A96E]/10"
-                style={{ fontSize: '2.4cqw', height: '55%' }}
+                className="w-full h-[130px] resize-none 
+                           bg-transparent text-center 
+                           text-[#F5F0E8] font-semibold 
+                           leading-relaxed text-base 
+                           outline-none 
+                           placeholder:text-[#C8A96E]/10"
               />
             </div>
           </div>
         </div>
 
+        {/* ONE-LINER — below the grid */}
+        <div className="w-full bg-[#F5F0E8] 
+                        focus-within:bg-[#C8A96E] 
+                        transition-colors px-8 py-6">
+          <div className="flex items-center 
+                          justify-between mb-3">
+            <label className="text-[10px] font-bold uppercase 
+                              tracking-[0.25em] text-[#0A0A0A]/50">
+              The One-Liner
+            </label>
+            <span className="text-xs text-[#0A0A0A]/30 tabular-nums">
+              {values.the_one_liner.length}/80
+            </span>
+          </div>
+          <input
+            type="text"
+            value={values.the_one_liner}
+            onChange={(e) => setValues(v => ({ 
+              ...v, the_one_liner: e.target.value 
+            }))}
+            placeholder="Distil it to one sentence"
+            maxLength={80}
+            className="w-full bg-transparent font-bold 
+                       text-[#0A0A0A] uppercase italic 
+                       text-center outline-none text-base
+                       placeholder:text-[#0A0A0A]/25"
+          />
+        </div>
+
         {/* STICKY FOOTER */}
-        <div className="sticky bottom-0 bg-[#0A0A0A] border-t border-[#2A2A2A] py-4 mt-6 flex items-center justify-end gap-3">
-          <Button variant="ghost" onClick={() => handleSave(false)} disabled={saving}>
+        <div className="sticky bottom-0 bg-[#0A0A0A] 
+                        border-t border-[#2A2A2A] 
+                        py-4 mt-0 flex items-center 
+                        justify-end gap-3">
+          <Button variant="ghost" 
+                  onClick={() => handleSave(false)} 
+                  disabled={saving}>
             Save Draft
           </Button>
-          <Button variant="accentFill" onClick={() => handleSave(true)} disabled={saving}>
+          <Button variant="accentFill" 
+                  onClick={() => handleSave(true)} 
+                  disabled={saving}>
             Publish Afterframe
           </Button>
         </div>

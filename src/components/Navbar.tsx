@@ -72,7 +72,7 @@ const Navbar = () => {
         {!user && (
           <Link
             to="/theory"
-            className="text-sm text-[#888] hover:text-[#F5F0E8] transition-colors hidden md:block"
+            className="text-sm text-[#999] hover:text-[#F5F0E8] transition-colors hidden md:block"
           >
             The Theory
           </Link>
@@ -92,7 +92,7 @@ const Navbar = () => {
 
               {/* Notifications */}
               <Link to="/notifications" className="relative p-1.5 hover:bg-[#1A1A1A] transition-colors">
-                <Bell size={18} className="text-[#888]" />
+                <Bell size={18} className="text-[#999]" />
                 {unreadCount > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 bg-[#C8A96E] text-[#0A0A0A] text-[10px] w-4 h-4 flex items-center justify-center font-bold">
                     {unreadCount}
@@ -104,12 +104,12 @@ const Navbar = () => {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen(o => !o)}
-                  className="w-8 h-8 bg-[#1A1A1A] border border-[#2A2A2A] flex items-center justify-center overflow-hidden hover:border-[#C8A96E] transition-colors"
+                  className="w-8 h-8 bg-[#1A1A1A] border border-[#2A2A2A] flex items-center justify-center overflow-hidden hover:border-[#C8A96E] transition-colors rounded-full"
                 >
                   {profile?.avatar_url ? (
                     <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-xs font-medium text-[#888]">
+                    <span className="text-xs font-medium text-[#999]">
                       {profile?.username?.charAt(0).toUpperCase() || "?"}
                     </span>
                   )}
@@ -124,7 +124,7 @@ const Navbar = () => {
                       }}
                       className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#F5F0E8] hover:bg-[#1E1E1E] transition-colors text-left"
                     >
-                      <User size={14} className="text-[#888]" />
+                      <User size={14} className="text-[#999]" />
                       View Profile
                     </button>
                     <button
@@ -134,7 +134,7 @@ const Navbar = () => {
                       }}
                       className="w-full flex items-center gap-2 px-4 py-2 text-sm text-[#F5F0E8] hover:bg-[#1E1E1E] transition-colors text-left"
                     >
-                      <Edit size={14} className="text-[#888]" />
+                      <Edit size={14} className="text-[#999]" />
                       Edit Profile
                     </button>
                     <div className="border-t border-[#2A2A2A] my-1" />

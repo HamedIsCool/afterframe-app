@@ -10,7 +10,7 @@ const TheoryPage = () => (
           "Life can only be understood backwards; 
           but it must be lived forwards."
         </p>
-        <p className="text-sm text-[#888] tracking-widest uppercase">
+        <p className="text-sm text-[#999] tracking-widest uppercase">
           Søren Kierkegaard
         </p>
       </div>
@@ -110,7 +110,7 @@ const TheoryPage = () => (
         <h2 className="text-xl font-semibold text-[#F5F0E8] mb-4 leading-snug">
           The Teleological Narrative
         </h2>
-        <p className="text-[#888] leading-relaxed text-base mb-4">
+        <p className="text-[#999] leading-relaxed text-base mb-4">
           In storytelling, a teleological narrative is one 
           where the ending gives meaning to everything 
           that came before it. You aren't just recounting 

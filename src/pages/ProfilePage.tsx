@@ -100,7 +100,7 @@ const ProfilePage = () => {
                   setEditAvatar(profile.avatar_url || ""); 
                   setEditOpen(true); 
                 }}
-                className="text-xs text-[#888] border border-[#2A2A2A] px-3 py-1 hover:border-[#C8A96E] hover:text-[#C8A96E] transition-colors"
+                className="text-xs text-[#999] border border-[#2A2A2A] px-3 py-1 hover:border-[#C8A96E] hover:text-[#C8A96E] transition-colors"
               >
                 Edit Profile
               </button>
@@ -139,11 +139,11 @@ const ProfilePage = () => {
           <div className="space-y-4 mt-2">
             {/* Avatar upload */}
             <div>
-              <label className="text-xs uppercase tracking-widest text-[#888] block mb-2">
+              <label className="text-xs uppercase tracking-widest text-[#999] block mb-2">
                 Picture
               </label>
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-[#0A0A0A] border border-[#2A2A2A] overflow-hidden flex items-center justify-center text-[#888] text-xl shrink-0">
+                <div className="w-16 h-16 rounded-full bg-[#0A0A0A] border border-[#2A2A2A] overflow-hidden flex items-center justify-center text-[#999] text-xl shrink-0">
                   {editAvatar ? (
                     <img src={editAvatar} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -198,7 +198,7 @@ const ProfilePage = () => {
             <div className="flex justify-end gap-2 pt-2">
               <button
                 onClick={() => setEditOpen(false)}
-                className="text-sm text-[#888] px-4 py-2 border border-[#2A2A2A] hover:border-[#F5F0E8] transition-colors"
+                className="text-sm text-[#999] px-4 py-2 border border-[#2A2A2A] hover:border-[#F5F0E8] transition-colors"
               >
                 Cancel
               </button>

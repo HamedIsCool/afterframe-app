@@ -28,7 +28,7 @@ const AfterframeCard = ({
   onSave,
 }: AfterframeCardProps) => {
   return (
-    <div className="border border-border bg-card p-6 hover:border-muted-foreground/30 transition-colors">
+    <div className="border border-[#1E1E1E] bg-[#111111] p-6 hover:border-[#2A2A2A] transition-colors">
       <Link to={`/frame/${authorUsername}/${id}`}>
         <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>
         <p className="text-accent italic text-sm mb-4 line-clamp-2">"{oneLiner}"</p>
@@ -42,9 +42,9 @@ const AfterframeCard = ({
               authorUsername?.charAt(0).toUpperCase()
             )}
           </div>
-          <span className="text-sm text-muted-foreground">{authorUsername}</span>
+          <span className="text-sm text-[#999]">{authorUsername}</span>
         </Link>
-        <div className="flex items-center gap-4 text-muted-foreground text-sm">
+        <div className="flex items-center gap-4 text-[#999] text-sm">
           <span className="flex items-center gap-1">
             <Heart size={14} /> {likeCount}
           </span>

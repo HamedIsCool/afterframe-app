@@ -78,13 +78,13 @@ const Feed = () => {
     }
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center text-[#999]">Loading...</div>;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
       <h1 className="text-2xl font-bold text-foreground mb-8">Feed</h1>
       {frames.length === 0 ? (
-        <p className="text-muted-foreground">No stories yet. Be the first to write one.</p>
+        <p className="text-[#999]">No stories yet. Be the first to write one.</p>
       ) : (
         <div className="space-y-4">
           {frames.map((frame) => (
