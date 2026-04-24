@@ -33,9 +33,17 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
 
   const handleSave = async (publish: boolean) => {
     if (!user) return;
-    if (!title.trim()) { toast.error("Title is required"); return; }
-    for (const f of fields) {
-      if (!values[f.key]?.trim()) { toast.error(`${f.label} is required`); return; }
+    if (!title.trim()) { 
+      toast.error("A title is required"); 
+      return; 
+    }
+    if (publish) {
+      for (const f of fields) {
+        if (!values[f.key]?.trim()) { 
+          toast.error(`${f.label} is required to publish`); 
+          return; 
+        }
+      }
     }
 
     setSaving(true);
@@ -53,9 +61,14 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
 
     let error;
     if (editId) {
-      ({ error } = await supabase.from("afterframes").update(payload).eq("id", editId));
+      ({ error } = await supabase
+        .from("afterframes")
+        .update(payload)
+        .eq("id", editId));
     } else {
-      ({ error } = await supabase.from("afterframes").insert(payload));
+      ({ error } = await supabase
+        .from("afterframes")
+        .insert(payload));
     }
 
     setSaving(false);

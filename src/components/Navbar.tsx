@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { LogOut, User, Edit } from "lucide-react";
+import { LogOut, User, Edit, LayoutDashboard } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const Navbar = () => {
@@ -126,6 +126,18 @@ const Navbar = () => {
                     >
                       <User size={14} className="text-[#999]" />
                       View Profile
+                    </button>
+                    <button
+                      onClick={() => { 
+                        navigate("/dashboard"); 
+                        setDropdownOpen(false); 
+                      }}
+                      className="w-full flex items-center gap-2 px-4 py-2 
+                                 text-sm text-[#F5F0E8] hover:bg-[#1E1E1E] 
+                                 transition-colors text-left"
+                    >
+                      <LayoutDashboard size={14} className="text-[#999]" />
+                      Dashboard
                     </button>
                     <button
                       onClick={() => { 

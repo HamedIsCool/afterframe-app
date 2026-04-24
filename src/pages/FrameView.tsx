@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { Heart, Bookmark, MessageSquare } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Heart, Bookmark, MessageSquare, Pencil, X, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,11 @@ const FrameView = () => {
   const [comments, setComments] = useState<any[]>([]);
   const [commentText, setCommentText] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
+  const [authPrompt, setAuthPrompt] = useState(false);
+
+  const isOwner = user?.id === frame?.author_id;
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -69,7 +74,7 @@ const FrameView = () => {
   }, [frame, author]);
 
   const toggleLike = async () => {
-    if (!user) return;
+    if (!user) { setAuthPrompt(true); return; }
     if (liked) {
       await supabase.from("likes").delete().eq("user_id", user.id).eq("afterframe_id", id!);
       setLiked(false);
@@ -165,6 +170,19 @@ const FrameView = () => {
             </div>
           </Link>
           <div className="flex items-center gap-4">
+            {isOwner && (
+              <Link
+                to={`/edit/${frame.id}`}
+                className="flex items-center gap-1.5 text-xs 
+                           uppercase tracking-widest font-medium
+                           text-[#888] border border-[#2A2A2A] 
+                           px-3 py-1.5 hover:border-[#C8A96E] 
+                           hover:text-[#C8A96E] transition-colors"
+              >
+                <Pencil size={12} />
+                Edit
+              </Link>
+            )}
             <button 
               onClick={toggleLike} 
               className={`flex items-center gap-1 text-sm 
@@ -305,7 +323,7 @@ const FrameView = () => {
                        mb-6 uppercase tracking-widest">
             Comments
           </h2>
-          {user && (
+          {user ? (
             <div className="flex gap-2 mb-6">
               <input
                 type="text"
@@ -319,13 +337,29 @@ const FrameView = () => {
                          focus:outline-none 
                          focus:border-[#C8A96E] 
                          transition-colors"
-              onKeyDown={(e) => e.key === 'Enter' && addComment()}
+                onKeyDown={(e) => e.key === 'Enter' && addComment()}
               />
               <Button variant="accentFill" size="sm" 
                       onClick={addComment}>
                 Post
               </Button>
             </div>
+          ) : (
+            <button
+              onClick={() => setAuthPrompt(true)}
+              className="w-full mb-6 flex items-center 
+                         justify-between px-4 py-3 
+                         border border-[#2A2A2A] 
+                         text-sm text-[#555] 
+                         hover:border-[#C8A96E] 
+                         hover:text-[#C8A96E] 
+                         transition-colors group"
+            >
+              <span>Leave a comment...</span>
+              <ArrowRight size={14} 
+                className="opacity-0 group-hover:opacity-100 
+                           transition-opacity" />
+            </button>
           )}
           <div className="space-y-5">
             {comments.map((c: any) => (
@@ -377,6 +411,69 @@ const FrameView = () => {
           </div>
         </div>
       </div>
+
+      {authPrompt && (
+        <div className="fixed inset-0 z-50 flex items-center 
+                        justify-center bg-black/70 px-4">
+          <div className="w-full max-w-sm bg-[#141414] 
+                          border border-[#2A2A2A] p-6 
+                          font-['Space_Grotesk']">
+
+            {/* Close */}
+            <div className="flex justify-end mb-2">
+              <button
+                onClick={() => setAuthPrompt(false)}
+                className="text-[#555] hover:text-[#F5F0E8] 
+                           transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="mb-6">
+              <p className="text-xs uppercase tracking-[0.2em] 
+                            text-[#C8A96E] font-bold mb-3">
+                Join the archive
+              </p>
+              <h3 className="text-lg font-semibold text-[#F5F0E8] 
+                             leading-snug mb-2">
+                You need an account to do that.
+              </h3>
+              <p className="text-sm text-[#888] leading-relaxed">
+                Afterframe is where hard experiences finally 
+                make sense. Create an account to like, comment, 
+                save, and share your own story.
+              </p>
+            </div>
+
+            {/* Actions */}
+            <div className="flex flex-col gap-3">
+              <Link
+                to="/signup"
+                onClick={() => setAuthPrompt(false)}
+                className="w-full text-center bg-[#C8A96E] 
+                           text-[#0A0A0A] font-bold px-4 py-3 
+                           text-sm uppercase tracking-widest 
+                           hover:bg-[#B89558] transition-colors"
+              >
+                Create Account
+              </Link>
+              <Link
+                to="/login"
+                onClick={() => setAuthPrompt(false)}
+                className="w-full text-center text-sm 
+                           text-[#888] border border-[#2A2A2A] 
+                           px-4 py-3 hover:border-[#555] 
+                           hover:text-[#F5F0E8] transition-colors"
+              >
+                Sign In
+              </Link>
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 };

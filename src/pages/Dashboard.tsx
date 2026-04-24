@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,8 @@ const Dashboard = () => {
   const [tab, setTab] = useState<"published" | "drafts">("published");
   const [frames, setFrames] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteTarget, setDeleteTarget] = 
+    useState<{ id: string; title: string } | null>(null);
 
   const fetchFrames = async () => {
     if (!user) return;
@@ -26,10 +28,14 @@ const Dashboard = () => {
 
   useEffect(() => { fetchFrames(); }, [user]);
 
-  const deleteFrame = async (id: string) => {
-    if (!confirm("Delete this afterframe?")) return;
-    await supabase.from("afterframes").delete().eq("id", id);
-    toast.success("Deleted");
+  const deleteFrame = async () => {
+    if (!deleteTarget) return;
+    await supabase
+      .from("afterframes")
+      .delete()
+      .eq("id", deleteTarget.id);
+    toast.success("Afterframe deleted");
+    setDeleteTarget(null);
     fetchFrames();
   };
 
@@ -70,12 +76,78 @@ const Dashboard = () => {
                 <Button variant="ghost" size="icon" asChild>
                   <Link to={`/edit/${f.id}`}><Pencil size={16} /></Link>
                 </Button>
-                <Button variant="ghost" size="icon" onClick={() => deleteFrame(f.id)} className="text-destructive hover:text-destructive">
+                <button
+                  onClick={() => setDeleteTarget({ 
+                    id: f.id, 
+                    title: f.title 
+                  })}
+                  className="p-2 text-[#555] hover:text-[#8B3A3A] 
+                             transition-colors"
+                >
                   <Trash2 size={16} />
-                </Button>
+                </button>
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center 
+                        justify-center bg-black/70 px-4">
+          <div className="w-full max-w-sm bg-[#141414] 
+                          border border-[#2A2A2A] p-6 
+                          font-['Space_Grotesk']">
+            
+            {/* Header */}
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] 
+                              text-[#8B3A3A] font-bold mb-1">
+                  Delete Afterframe
+                </p>
+                <p className="text-sm text-[#F5F0E8] font-medium 
+                              leading-snug">
+                  "{deleteTarget.title}"
+                </p>
+              </div>
+              <button
+                onClick={() => setDeleteTarget(null)}
+                className="text-[#555] hover:text-[#F5F0E8] 
+                           transition-colors ml-4 shrink-0 mt-0.5"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Body */}
+            <p className="text-sm text-[#888] leading-relaxed mb-6">
+              This will permanently remove this Afterframe 
+              from the archive. This cannot be undone.
+            </p>
+
+            {/* Actions */}
+            <div className="flex items-center justify-end gap-3">
+              <button
+                onClick={() => setDeleteTarget(null)}
+                className="text-sm text-[#888] px-4 py-2 
+                           border border-[#2A2A2A] 
+                           hover:border-[#555] hover:text-[#F5F0E8] 
+                           transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={deleteFrame}
+                className="text-sm bg-[#8B3A3A] text-[#F5F0E8] 
+                           font-semibold px-4 py-2 
+                           hover:bg-[#7A2F2F] transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+
+          </div>
         </div>
       )}
     </div>
