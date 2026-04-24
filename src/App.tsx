@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 import Navbar from "@/components/Navbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Landing from "@/pages/Landing";
@@ -22,6 +23,11 @@ import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const ScrollToTop = () => {
+  useScrollToTop();
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
@@ -29,6 +35,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollToTop />
           <Navbar />
           <Routes>
             <Route path="/" element={<Landing />} />
