@@ -31,6 +31,11 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
   });
   const [saving, setSaving] = useState(false);
 
+  const isPublished = initialData?.is_published === "true";
+  const authorUsername = initialData?.author_username || "";
+
+  const [dirty, setDirty] = useState(false);
+
   const handleSave = async (publish: boolean) => {
     if (!user) return;
     if (!title.trim()) { 
@@ -89,7 +94,7 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
         <input
           type="text"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => { setTitle(e.target.value); setDirty(true); }}
           placeholder="Give your story a title"
           maxLength={70}
           className="w-full bg-transparent text-3xl font-bold 
@@ -125,9 +130,9 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
               <textarea
                 maxLength={120}
                 value={values.the_event}
-                onChange={(e) => setValues(v => ({ 
-                  ...v, the_event: e.target.value 
-                }))}
+                onChange={(e) => { setValues(v => ({
+                  ...v, the_event: e.target.value
+                })); setDirty(true); }}
                 placeholder="What happened?"
                 className="w-full h-[120px] resize-none 
                            bg-transparent text-[#F5F0E8] 
@@ -155,9 +160,9 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
               <textarea
                 maxLength={120}
                 value={values.the_pivot}
-                onChange={(e) => setValues(v => ({ 
-                  ...v, the_pivot: e.target.value 
-                }))}
+                onChange={(e) => { setValues(v => ({
+                  ...v, the_pivot: e.target.value
+                })); setDirty(true); }}
                 placeholder="What was the first move?"
                 className="w-full h-[120px] resize-none 
                            bg-transparent text-[#F5F0E8] 
@@ -194,9 +199,9 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
               <textarea
                 maxLength={100}
                 value={values.the_gut_punch}
-                onChange={(e) => setValues(v => ({ 
-                  ...v, the_gut_punch: e.target.value 
-                }))}
+                onChange={(e) => { setValues(v => ({
+                  ...v, the_gut_punch: e.target.value
+                })); setDirty(true); }}
                 placeholder="How did it feel?"
                 className="w-full h-[120px] resize-none 
                            bg-transparent text-[#F5F0E8]/80 
@@ -238,9 +243,9 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
               <textarea
                 maxLength={200}
                 value={values.the_retroactive_why}
-                onChange={(e) => setValues(v => ({ 
-                  ...v, the_retroactive_why: e.target.value 
-                }))}
+                onChange={(e) => { setValues(v => ({
+                  ...v, the_retroactive_why: e.target.value
+                })); setDirty(true); }}
                 placeholder="What truth can't you unsee now?"
                 className="w-full h-[130px] resize-none 
                            bg-transparent text-center 
@@ -270,9 +275,9 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
           <input
             type="text"
             value={values.the_one_liner}
-            onChange={(e) => setValues(v => ({ 
-              ...v, the_one_liner: e.target.value 
-            }))}
+            onChange={(e) => { setValues(v => ({
+              ...v, the_one_liner: e.target.value
+            })); setDirty(true); }}
             placeholder="Distil it to one sentence"
             maxLength={80}
             className="w-full bg-transparent font-bold 
@@ -283,20 +288,38 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
         </div>
 
         {/* STICKY FOOTER */}
-        <div className="sticky bottom-0 bg-[#0A0A0A] 
-                        border-t border-[#2A2A2A] 
-                        py-4 mt-0 flex items-center 
-                        justify-end gap-3">
-          <Button variant="ghost" 
-                  onClick={() => handleSave(false)} 
-                  disabled={saving}>
-            Save Draft
-          </Button>
-          <Button variant="accentFill" 
-                  onClick={() => handleSave(true)} 
-                  disabled={saving}>
-            Publish Afterframe
-          </Button>
+        <div className="sticky bottom-0 bg-[#0A0A0A]
+                        border-t border-[#2A2A2A]
+                        py-4 mt-0 flex items-center
+                        justify-between gap-3">
+
+          {/* Left: link to live frame if published */}
+          <div>
+            {editId && isPublished && authorUsername && (
+              <a
+                href={`/frame/${authorUsername}/${editId}`}
+                className="text-xs text-[#555] hover:text-[#C8A96E]
+                           transition-colors uppercase tracking-widest"
+              >
+                ↗ View Frame
+              </a>
+            )}
+          </div>
+
+          <div className="flex items-center gap-3">
+            {!isPublished && (
+              <Button variant="ghost"
+                      onClick={() => handleSave(false)}
+                      disabled={saving || !dirty}>
+                Save Draft
+              </Button>
+            )}
+            <Button variant="accentFill"
+                    onClick={() => handleSave(true)}
+                    disabled={saving || !dirty}>
+              {isPublished ? "Save Changes" : "Publish Afterframe"}
+            </Button>
+          </div>
         </div>
 
       </div>

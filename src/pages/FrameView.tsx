@@ -96,13 +96,20 @@ const FrameView = () => {
   };
 
   const toggleSave = async () => {
-    if (!user) return;
+    if (!user) { setAuthPrompt(true); return; }
     if (saved) {
       await supabase.from("saves").delete().eq("user_id", user.id).eq("afterframe_id", id!);
       setSaved(false);
+      toast("Removed from saved");
     } else {
       await supabase.from("saves").insert({ user_id: user.id, afterframe_id: id });
       setSaved(true);
+      toast("Saved — find it under your profile → Saved", {
+        action: {
+          label: "View Saved",
+          onClick: () => window.location.href = "/saved",
+        },
+      });
     }
   };
 
@@ -230,7 +237,6 @@ const FrameView = () => {
             title={frame.title}
             oneLiner={frame.the_one_liner}
             authorUsername={author?.username || ""}
-            retroactiveWhy={frame.the_retroactive_why}
             frameId={frame.id}
           />
         </div>

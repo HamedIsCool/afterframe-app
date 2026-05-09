@@ -12,9 +12,10 @@ const EditPage = () => {
     const fetch = async () => {
       const { data: frame } = await supabase
         .from("afterframes")
-        .select("*")
+        .select("*, author:profiles!author_id(username)")
         .eq("id", id)
         .single();
+      if (frame) frame.author_username = frame.author?.username || "";
       if (frame) {
         setData({
           title: frame.title,
@@ -23,6 +24,8 @@ const EditPage = () => {
           the_pivot: frame.the_pivot,
           the_retroactive_why: frame.the_retroactive_why,
           the_one_liner: frame.the_one_liner,
+          is_published: frame.is_published ? "true" : "false",
+          author_username: frame.author_username || "",
         });
       }
       setLoading(false);

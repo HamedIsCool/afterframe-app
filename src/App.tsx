@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -20,6 +21,8 @@ import SavedPage from "@/pages/SavedPage";
 import Notifications from "@/pages/Notifications";
 import TheoryPage from "@/pages/TheoryPage";
 import NotFound from "@/pages/NotFound";
+import SidebarLayout from "@/components/SidebarLayout";
+import { SidebarProvider } from "@/hooks/useSidebar";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +34,7 @@ const ScrollToTop = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
+      <SidebarProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -41,19 +45,22 @@ const App = () => (
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/feed" element={<Feed />} />
+            <Route path="/feed" element={<SidebarLayout><Feed /></SidebarLayout>} />
             <Route path="/write" element={<ProtectedRoute><WritePage /></ProtectedRoute>} />
             <Route path="/edit/:id" element={<ProtectedRoute><EditPage /></ProtectedRoute>} />
             <Route path="/frame/:username/:id" element={<FrameView />} />
-            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/saved" element={<ProtectedRoute><SavedPage /></ProtectedRoute>} />
-            <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+            <Route path="/dashboard" element={<ProtectedRoute><SidebarLayout><Dashboard /></SidebarLayout></ProtectedRoute>} />
+            <Route path="/dashboard/frames" element={<ProtectedRoute><SidebarLayout><Dashboard /></SidebarLayout></ProtectedRoute>} />
+            <Route path="/dashboard/saved" element={<ProtectedRoute><SidebarLayout><Dashboard /></SidebarLayout></ProtectedRoute>} />
+            <Route path="/saved" element={<Navigate to="/dashboard/saved" replace />} />
+            <Route path="/notifications" element={<ProtectedRoute><SidebarLayout><Notifications /></SidebarLayout></ProtectedRoute>} />
             <Route path="/theory" element={<TheoryPage />} />
-            <Route path="/:username" element={<ProfilePage />} />
+            <Route path="/:username" element={<SidebarLayout><ProfilePage /></SidebarLayout>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
+      </SidebarProvider>
     </AuthProvider>
   </QueryClientProvider>
 );

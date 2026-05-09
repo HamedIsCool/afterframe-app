@@ -1,15 +1,17 @@
 import { Link } from "react-router-dom";
-import { Bell, PenLine, Search } from "lucide-react";
+import { Bell, PenLine, Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { LogOut, User, Edit, LayoutDashboard } from "lucide-react";
+import { LogOut, User, Edit } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useSidebar } from "@/hooks/useSidebar";
 
 const Navbar = () => {
   const { user, profile } = useAuth();
   const navigate = useNavigate();
+  const { toggle } = useSidebar();
   const [unreadCount, setUnreadCount] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -70,6 +72,14 @@ const Navbar = () => {
 
         {/* LEFT: Logo + Search (logged in only) */}
         <div className="flex items-center gap-4 flex-1 min-w-0">
+          {user && (
+            <button
+              onClick={toggle}
+              className="text-[#555] hover:text-[#F5F0E8] transition-colors p-1 shrink-0"
+            >
+              <Menu size={18} />
+            </button>
+          )}
           <Link to={user ? "/feed" : "/"} className="flex items-center shrink-0">
             <img src="/logo.png" alt="Afterframe" className="h-18 w-36" />
           </Link>
@@ -146,18 +156,6 @@ const Navbar = () => {
                     >
                       <User size={14} className="text-[#999]" />
                       View Profile
-                    </button>
-                    <button
-                      onClick={() => { 
-                        navigate("/dashboard"); 
-                        setDropdownOpen(false); 
-                      }}
-                      className="w-full flex items-center gap-2 px-4 py-2 
-                                 text-sm text-[#F5F0E8] hover:bg-[#1E1E1E] 
-                                 transition-colors text-left"
-                    >
-                      <LayoutDashboard size={14} className="text-[#999]" />
-                      Dashboard
                     </button>
                     <button
                       onClick={() => { 
