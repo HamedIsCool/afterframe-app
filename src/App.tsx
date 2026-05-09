@@ -59,8 +59,8 @@ const App = () => (
             <Route path="/dashboard/saved" element={<ProtectedRoute><SidebarLayout><Dashboard /></SidebarLayout></ProtectedRoute>} />
             <Route path="/saved" element={<Navigate to="/dashboard/saved" replace />} />
             <Route path="/notifications" element={<ProtectedRoute><SidebarLayout><Notifications /></SidebarLayout></ProtectedRoute>} />
-            <Route path="/theory" element={<TheoryPage />} />
-            <Route path="/wall" element={<WallPage />} />
+            <Route path="/theory" element={<SidebarLayout><TheoryPage /></SidebarLayout>} />
+            <Route path="/wall" element={<SidebarLayout><WallPage /></SidebarLayout>} />
             <Route path="/:username" element={<SidebarLayout><ProfilePage /></SidebarLayout>} />
             <Route path="*" element={<NotFound />} />
           </Routes>

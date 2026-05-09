@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { formatDistanceToNow } from "date-fns";
+import { supabase } from "@/integrations/supabase/client";
 
 const WallPage = () => {
   const [lines, setLines] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchLines = async () => {
       const { data } = await supabase
         .from("afterframes")
         .select("id, the_one_liner, title, published_at, updated_at, author:profiles!author_id(username)")
@@ -18,7 +18,7 @@ const WallPage = () => {
       setLines(data || []);
       setLoading(false);
     };
-    fetch();
+    fetchLines();
   }, []);
 
   return (
@@ -38,8 +38,8 @@ const WallPage = () => {
         </p>
       </div>
 
-      {/* LINES */}
-      <div className="max-w-2xl mx-auto px-6 py-12">
+      {/* GRID */}
+      <div className="max-w-5xl mx-auto px-6 py-12">
         {loading ? (
           <p className="text-[#555] text-sm text-center">Loading...</p>
         ) : lines.length === 0 ? (
@@ -53,26 +53,40 @@ const WallPage = () => {
             </p>
           </div>
         ) : (
-          <div className="space-y-0">
-            {lines.map((line, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {lines.map((line) => (
               <Link
                 key={line.id}
                 to={`/frame/${line.author?.username}/${line.id}`}
-                className="group block border-b border-[#141414]
-                           hover:border-[#2A2A2A] py-7
-                           transition-colors"
+                className="group flex flex-col justify-between
+                           h-[200px] border border-[#2A2A2A] bg-[#141414]
+                           p-5 hover:border-[#C8A96E] transition-colors"
               >
-                <p className="text-lg font-bold text-[#888] italic
+                {/* One-liner */}
+                <p className="text-sm font-semibold italic text-[#666]
                                group-hover:text-[#F5F0E8]
-                               transition-colors leading-snug mb-3">
+                               transition-colors leading-relaxed mb-4">
                   "{line.the_one_liner}"
                 </p>
-                <div className="flex items-center gap-3">
-                  <span className="text-xs text-[#333] group-hover:text-[#555] transition-colors">
+
+                {/* Divider */}
+                <div className="w-6 h-px bg-[#2A2A2A] group-hover:bg-[#C8A96E]/40
+                                transition-colors mb-3" />
+
+                {/* Title */}
+                <p className="text-xs text-[#444] group-hover:text-[#666]
+                               transition-colors leading-snug mb-3 line-clamp-2">
+                  {line.title}
+                </p>
+
+                {/* Meta */}
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-[#333] group-hover:text-[#555]
+                                   transition-colors font-medium">
                     {line.author?.username}
                   </span>
-                  <span className="text-[#2A2A2A]">·</span>
-                  <span className="text-xs text-[#333] group-hover:text-[#555] transition-colors">
+                  <span className="text-xs text-[#2A2A2A] group-hover:text-[#444]
+                                   transition-colors">
                     {line.updated_at && new Date(line.updated_at) > new Date(line.published_at)
                       ? `updated ${formatDistanceToNow(new Date(line.updated_at), { addSuffix: true })}`
                       : formatDistanceToNow(new Date(line.published_at), { addSuffix: true })}

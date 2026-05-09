@@ -1,11 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { Layers, Bookmark, Rss, ScrollText } from "lucide-react";
+import { Layers, Bookmark, LayoutList } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSidebar } from "@/hooks/useSidebar";
 
 const NAV = [
-  { label: "Feed", path: "/feed", icon: Rss },
-  { label: "The Wall", path: "/wall", icon: ScrollText },
+  { label: "Home", path: "/feed", icon: LayoutList },
   { label: "Afterframes", path: "/dashboard/frames", icon: Layers },
   { label: "Saved", path: "/dashboard/saved", icon: Bookmark },
 ];
