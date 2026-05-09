@@ -47,6 +47,14 @@ const Login = () => {
               className="w-full bg-background border border-border rounded-sm px-3 py-2 text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-accent"
             />
           </div>
+          <div className="flex justify-end -mt-1">
+            <Link
+              to="/forgot-password"
+              className="text-xs text-[#555] hover:text-[#C8A96E] transition-colors"
+            >
+              Forgot password?
+            </Link>
+          </div>
           <Button type="submit" variant="accentFill" className="w-full" disabled={loading}>
             {loading ? "Logging in..." : "Log In"}
           </Button>

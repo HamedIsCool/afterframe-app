@@ -21,6 +21,8 @@ import SavedPage from "@/pages/SavedPage";
 import Notifications from "@/pages/Notifications";
 import TheoryPage from "@/pages/TheoryPage";
 import NotFound from "@/pages/NotFound";
+import ForgotPassword from "@/pages/ForgotPassword";
+import ResetPassword from "@/pages/ResetPassword";
 import SidebarLayout from "@/components/SidebarLayout";
 import { SidebarProvider } from "@/hooks/useSidebar";
 
@@ -45,6 +47,8 @@ const App = () => (
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/feed" element={<SidebarLayout><Feed /></SidebarLayout>} />
             <Route path="/write" element={<ProtectedRoute><WritePage /></ProtectedRoute>} />
             <Route path="/edit/:id" element={<ProtectedRoute><EditPage /></ProtectedRoute>} />
