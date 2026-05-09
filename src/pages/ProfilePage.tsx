@@ -108,7 +108,6 @@ const ProfilePage = () => {
           </div>
           <p className="text-sm text-muted-foreground">@{profile.username}</p>
           {profile.bio && <p className="text-sm text-foreground mt-1">{profile.bio}</p>}
-          <p className="text-xs text-muted-foreground mt-1">0 followers · 0 following</p>
         </div>
       </div>
 
