@@ -135,8 +135,18 @@ const FrameView = () => {
                   font-['Space_Grotesk']">
       <div className="w-full max-w-[720px] mx-auto">
 
+        {/* BACK */}
+        <button
+          onClick={() => navigate(-1)}
+          className="mb-6 text-sm text-[#999]
+                     hover:text-[#F5F0E8] transition-colors
+                     font-['Space_Grotesk'] flex items-center gap-1"
+        >
+          ← Back
+        </button>
+
         {/* TITLE */}
-        <h1 className="text-3xl font-bold text-[#F5F0E8] 
+        <h1 className="text-3xl font-bold text-[#F5F0E8]
                      tracking-tight mb-6 leading-snug">
           {frame.title}
         </h1>

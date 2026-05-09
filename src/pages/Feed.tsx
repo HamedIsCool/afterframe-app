@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import AfterframeCard from "@/components/AfterframeCard";
@@ -16,25 +17,76 @@ interface FeedItem {
 
 const Feed = () => {
   const { user } = useAuth();
+  const location = useLocation();
+  const searchQuery = new URLSearchParams(location.search).get("q") || "";
   const [frames, setFrames] = useState<FeedItem[]>([]);
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
 
+  const fetchFeed = async () => {
+    const { data, error } = await supabase
+      .from("afterframes")
+      .select("id, title, the_one_liner, published_at, author:profiles!author_id(username, avatar_url)")
+      .eq("is_published", true)
+      .order("published_at", { ascending: false });
+
+    if (error) {
+      toast.error("Failed to load feed");
+      setLoading(false);
+      return;
+    }
+
+    // Fetch counts
+    const frameIds = (data || []).map((f: any) => f.id);
+    const [likesRes, commentsRes] = await Promise.all([
+      supabase.from("likes").select("afterframe_id").in("afterframe_id", frameIds),
+      supabase.from("comments").select("afterframe_id").in("afterframe_id", frameIds),
+    ]);
+
+    const likeCounts: Record<string, number> = {};
+    const commentCounts: Record<string, number> = {};
+    (likesRes.data || []).forEach((l: any) => { likeCounts[l.afterframe_id] = (likeCounts[l.afterframe_id] || 0) + 1; });
+    (commentsRes.data || []).forEach((c: any) => { commentCounts[c.afterframe_id] = (commentCounts[c.afterframe_id] || 0) + 1; });
+
+    setFrames((data || []).map((f: any) => ({
+      ...f,
+      author: f.author,
+      like_count: likeCounts[f.id] || 0,
+      comment_count: commentCounts[f.id] || 0,
+    })));
+
+    // Fetch saved
+    if (user) {
+      const { data: saves } = await supabase
+        .from("saves")
+        .select("afterframe_id")
+        .eq("user_id", user.id);
+      setSavedIds(new Set((saves || []).map((s: any) => s.afterframe_id)));
+    }
+
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchFeed = async () => {
+    fetchFeed();
+  }, [user]);
+
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      fetchFeed();
+      return;
+    }
+    const runSearch = async () => {
+      setLoading(true);
       const { data, error } = await supabase
         .from("afterframes")
         .select("id, title, the_one_liner, published_at, author:profiles!author_id(username, avatar_url)")
         .eq("is_published", true)
+        .or(`title.ilike.%${searchQuery}%,the_one_liner.ilike.%${searchQuery}%`)
         .order("published_at", { ascending: false });
 
-      if (error) {
-        toast.error("Failed to load feed");
-        setLoading(false);
-        return;
-      }
+      if (error) { toast.error("Search failed"); setLoading(false); return; }
 
-      // Fetch counts
       const frameIds = (data || []).map((f: any) => f.id);
       const [likesRes, commentsRes] = await Promise.all([
         supabase.from("likes").select("afterframe_id").in("afterframe_id", frameIds),
@@ -48,24 +100,13 @@ const Feed = () => {
 
       setFrames((data || []).map((f: any) => ({
         ...f,
-        author: f.author,
         like_count: likeCounts[f.id] || 0,
         comment_count: commentCounts[f.id] || 0,
       })));
-
-      // Fetch saved
-      if (user) {
-        const { data: saves } = await supabase
-          .from("saves")
-          .select("afterframe_id")
-          .eq("user_id", user.id);
-        setSavedIds(new Set((saves || []).map((s: any) => s.afterframe_id)));
-      }
-
       setLoading(false);
     };
-    fetchFeed();
-  }, [user]);
+    runSearch();
+  }, [searchQuery]);
 
   const toggleSave = async (afterframeId: string) => {
     if (!user) return;
@@ -82,9 +123,13 @@ const Feed = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
-      <h1 className="text-2xl font-bold text-foreground mb-8">Feed</h1>
+      <h1 className="text-2xl font-bold text-foreground mb-8">
+        {searchQuery ? `Results for "${searchQuery}"` : "Feed"}
+      </h1>
       {frames.length === 0 ? (
-        <p className="text-[#999]">No stories yet. Be the first to write one.</p>
+        <p className="text-[#999]">
+          {searchQuery ? `No frames found for "${searchQuery}".` : "No stories yet. Be the first to write one."}
+        </p>
       ) : (
         <div className="space-y-4">
           {frames.map((frame) => (

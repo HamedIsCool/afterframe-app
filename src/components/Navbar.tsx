@@ -3,7 +3,7 @@ import { Bell, PenLine, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { LogOut, User, Edit, LayoutDashboard } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -13,6 +13,24 @@ const Navbar = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const location = useLocation();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    setSearchQuery(params.get("q") || "");
+  }, [location.search]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSearchQuery(val);
+    if (val.trim()) {
+      navigate(`/feed?q=${encodeURIComponent(val.trim())}`);
+    } else {
+      navigate("/feed");
+    }
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -61,7 +79,9 @@ const Navbar = () => {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#555]" size={14} />
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder="Search frames..."
+                value={searchQuery}
+                onChange={handleSearch}
                 className="w-full bg-[#141414] border border-[#2A2A2A] pl-8 pr-3 py-1.5 text-sm text-[#F5F0E8] placeholder:text-[#555] focus:outline-none focus:border-[#C8A96E] transition-colors"
               />
             </div>
