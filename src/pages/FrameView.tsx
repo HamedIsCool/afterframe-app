@@ -180,9 +180,11 @@ const FrameView = () => {
                 {author?.username}
               </p>
               <p className="text-xs text-[#999]">
-                {frame.published_at && formatDistanceToNow(
-                  new Date(frame.published_at), { addSuffix: true }
-                )}
+                {frame.updated_at && new Date(frame.updated_at) > new Date(frame.published_at)
+                  ? `updated ${formatDistanceToNow(new Date(frame.updated_at), { addSuffix: true })}`
+                  : frame.published_at
+                  ? formatDistanceToNow(new Date(frame.published_at), { addSuffix: true })
+                  : ""}
               </p>
             </div>
           </Link>

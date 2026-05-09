@@ -162,7 +162,11 @@ const Dashboard = () => {
                             <p className="text-[#F5F0E8] font-medium">{f.title}</p>
                           )}
                           <p className="text-xs text-[#555] mt-0.5">
-                            {formatDistanceToNow(new Date(f.created_at), { addSuffix: true })}
+                            {f.is_published && f.updated_at && new Date(f.updated_at) > new Date(f.published_at)
+                              ? `updated ${formatDistanceToNow(new Date(f.updated_at), { addSuffix: true })}`
+                              : f.is_published && f.published_at
+                              ? `published ${formatDistanceToNow(new Date(f.published_at), { addSuffix: true })}`
+                              : `created ${formatDistanceToNow(new Date(f.created_at), { addSuffix: true })}`}
                           </p>
                         </div>
                         <div className="flex items-center gap-2">

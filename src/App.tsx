@@ -23,6 +23,7 @@ import TheoryPage from "@/pages/TheoryPage";
 import NotFound from "@/pages/NotFound";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
+import WallPage from "@/pages/WallPage";
 import SidebarLayout from "@/components/SidebarLayout";
 import { SidebarProvider } from "@/hooks/useSidebar";
 
@@ -59,6 +60,7 @@ const App = () => (
             <Route path="/saved" element={<Navigate to="/dashboard/saved" replace />} />
             <Route path="/notifications" element={<ProtectedRoute><SidebarLayout><Notifications /></SidebarLayout></ProtectedRoute>} />
             <Route path="/theory" element={<TheoryPage />} />
+            <Route path="/wall" element={<WallPage />} />
             <Route path="/:username" element={<SidebarLayout><ProfilePage /></SidebarLayout>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
