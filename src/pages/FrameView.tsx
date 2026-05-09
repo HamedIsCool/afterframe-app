@@ -193,15 +193,19 @@ const FrameView = () => {
                 Edit
               </Link>
             )}
-            <button 
-              onClick={toggleLike} 
-              className={`flex items-center gap-1 text-sm 
-                        transition-colors 
-                        ${liked 
-                          ? "text-[#C8A96E]" 
+            <button
+              onClick={!isOwner ? toggleLike : undefined}
+              disabled={isOwner}
+              title={isOwner ? "You can't like your own frame" : undefined}
+              className={`flex items-center gap-1 text-sm
+                        transition-colors
+                        ${isOwner
+                          ? "text-[#333] cursor-not-allowed"
+                          : liked
+                          ? "text-[#C8A96E]"
                           : "text-[#999] hover:text-[#F5F0E8]"}`}
             >
-              <Heart size={16} fill={liked ? "currentColor" : "none"} /> 
+              <Heart size={16} fill={liked ? "currentColor" : "none"} />
               {likeCount}
             </button>
             <button 

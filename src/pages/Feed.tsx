@@ -127,9 +127,26 @@ const Feed = () => {
         {searchQuery ? `Results for "${searchQuery}"` : "Feed"}
       </h1>
       {frames.length === 0 ? (
-        <p className="text-[#999]">
-          {searchQuery ? `No frames found for "${searchQuery}".` : "No stories yet. Be the first to write one."}
-        </p>
+        <div className="mt-16 flex flex-col items-center text-center">
+          <div className="w-8 h-8 border-t-2 border-l-2 border-[#C8A96E] mb-6" />
+          <p className="text-xs uppercase tracking-[0.2em] text-[#C8A96E] font-bold mb-3">
+            {searchQuery ? "No results" : "The archive is empty"}
+          </p>
+          <p className="text-sm text-[#888] leading-relaxed max-w-xs mb-6">
+            {searchQuery
+              ? `No frames found for "${searchQuery}". Try a different word or phrase.`
+              : "No one has framed a story yet. Be the first."}
+          </p>
+          {!searchQuery && (
+            <a
+              href="/write"
+              className="text-sm font-bold uppercase tracking-widest px-5 py-2.5
+                         bg-[#C8A96E] text-[#0A0A0A] hover:bg-[#B89558] transition-colors"
+            >
+              Frame It
+            </a>
+          )}
+        </div>
       ) : (
         <div className="space-y-4">
           {frames.map((frame) => (

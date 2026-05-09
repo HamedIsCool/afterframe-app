@@ -47,7 +47,23 @@ const SavedPage = () => {
     <div className="container mx-auto px-4 py-8 max-w-2xl">
       <h1 className="text-2xl font-bold text-foreground mb-8">Saved</h1>
       {frames.length === 0 ? (
-        <p className="text-muted-foreground text-sm">No saved stories.</p>
+        <div className="mt-16 flex flex-col items-center text-center">
+          <div className="w-8 h-8 border-t-2 border-l-2 border-[#C8A96E] mb-6" />
+          <p className="text-xs uppercase tracking-[0.2em] text-[#C8A96E] font-bold mb-3">
+            Nothing saved yet
+          </p>
+          <p className="text-sm text-[#888] leading-relaxed max-w-xs mb-6">
+            Frames you save will appear here. Browse the feed and save the ones that land.
+          </p>
+          <a
+            href="/feed"
+            className="text-sm font-bold uppercase tracking-widest px-5 py-2.5
+                       border border-[#2A2A2A] text-[#888]
+                       hover:border-[#C8A96E] hover:text-[#C8A96E] transition-colors"
+          >
+            Browse the Archive
+          </a>
+        </div>
       ) : (
         <div className="space-y-4">
           {frames.map((f: any) => (

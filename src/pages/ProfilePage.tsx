@@ -126,7 +126,28 @@ const ProfilePage = () => {
             commentCount={f.comment_count}
           />
         ))}
-        {frames.length === 0 && <p className="text-muted-foreground text-sm">No published stories yet.</p>}
+        {frames.length === 0 && (
+          <div className="mt-12 flex flex-col items-center text-center">
+            <div className="w-8 h-8 border-t-2 border-l-2 border-[#C8A96E] mb-6" />
+            <p className="text-xs uppercase tracking-[0.2em] text-[#C8A96E] font-bold mb-3">
+              {isOwner ? "Your archive is empty" : "No frames yet"}
+            </p>
+            <p className="text-sm text-[#888] leading-relaxed max-w-xs mb-6">
+              {isOwner
+                ? "You haven't published a frame yet. Every archive starts with one story."
+                : `${profile.username} hasn't published a frame yet.`}
+            </p>
+            {isOwner && (
+              <a
+                href="/write"
+                className="text-sm font-bold uppercase tracking-widest px-5 py-2.5
+                           bg-[#C8A96E] text-[#0A0A0A] hover:bg-[#B89558] transition-colors"
+              >
+                Frame It
+              </a>
+            )}
+          </div>
+        )}
       </div>
 
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
