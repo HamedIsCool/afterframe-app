@@ -80,7 +80,7 @@ const ProfilePage = () => {
   if (!profile) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">User not found</div>;
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-2xl">
+    <div className="w-full px-0 py-8">
       <div className="flex items-center gap-4 mb-8">
         <div className="w-16 h-16 rounded-full bg-muted border border-border flex items-center justify-center text-xl text-muted-foreground overflow-hidden">
           {profile.avatar_url ? (

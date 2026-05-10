@@ -25,7 +25,7 @@ const WallPage = () => {
     <div className="min-h-screen bg-[#0A0A0A] font-['Space_Grotesk']">
 
       {/* HEADER */}
-      <div className="border-b border-[#2A2A2A] px-6 py-10 text-center">
+      <div className="border-b border-[#2A2A2A] px-4 md:px-6 py-10 text-center">
         <p className="text-xs uppercase tracking-[0.3em] text-[#C8A96E] font-bold mb-3">
           The Archive
         </p>
@@ -39,7 +39,7 @@ const WallPage = () => {
       </div>
 
       {/* GRID */}
-      <div className="max-w-5xl mx-auto px-6 py-12">
+      <div className="w-full px-0 py-8 md:py-12">
         {loading ? (
           <p className="text-[#555] text-sm text-center">Loading...</p>
         ) : lines.length === 0 ? (
@@ -53,7 +53,7 @@ const WallPage = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {lines.map((line) => (
               <Link
                 key={line.id}

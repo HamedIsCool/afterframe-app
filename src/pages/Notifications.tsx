@@ -33,7 +33,7 @@ const Notifications = () => {
   if (loading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>;
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-2xl">
+    <div className="w-full px-0 py-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-foreground">Notifications</h1>
         <Button variant="ghost" size="sm" onClick={markAllRead}>Mark all read</Button>
@@ -55,7 +55,7 @@ const Notifications = () => {
             <Link
               key={n.id}
               to={`/frame/${n.afterframe?.author?.username}/${n.afterframe_id}`}
-              className={`flex items-start gap-4 p-4 border
+              className={`flex items-start gap-3 p-4 border
                 ${n.is_read
                   ? "border-[#2A2A2A] bg-[#0A0A0A]"
                   : "border-[#C8A96E]/30 bg-[#141414]"}
@@ -71,8 +71,8 @@ const Notifications = () => {
 
               {/* Content */}
               <div className="flex-1 min-w-0">
-                {/* Who + action */}
-                <div className="flex items-center gap-2 mb-1">
+                {/* Who + action + time */}
+                <div className="flex flex-wrap items-center gap-2 mb-1">
                   <span className="text-sm font-semibold text-[#F5F0E8]">
                     {n.actor?.username}
                   </span>
@@ -82,6 +82,9 @@ const Notifications = () => {
                       : "text-[#8B3A3A] bg-[#8B3A3A]/10"}`}>
                     {n.type === "like" ? "liked" : "commented"}
                   </span>
+                  <span className="text-xs text-[#555] ml-auto">
+                    {formatDistanceToNow(new Date(n.created_at), { addSuffix: true })}
+                  </span>
                 </div>
 
                 {/* Which frame */}
@@ -89,11 +92,6 @@ const Notifications = () => {
                   {n.afterframe?.title}
                 </p>
               </div>
-
-              {/* When */}
-              <span className="text-xs text-[#555] shrink-0 mt-0.5">
-                {formatDistanceToNow(new Date(n.created_at), { addSuffix: true })}
-              </span>
             </Link>
           ))}
         </div>

@@ -36,7 +36,7 @@ const TheoryPage = () => (
         </p>
       </div>
 
-      <div className="w-full my-14">
+      <div className="w-full my-14 overflow-x-auto">
   <div style={{
     background: '#f5f0e8',
     border: '1px solid #2A2A2A',
