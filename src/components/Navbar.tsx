@@ -118,7 +118,8 @@ const Navbar = () => {
         <div className="flex items-center gap-3 shrink-0 ml-auto">
           {user ? (
             <>
-              <Button variant="accent" size="sm" asChild>
+              <Button variant="accent" size="sm" asChild
+                      className="hidden md:flex">
                 <Link to="/write">
                   <PenLine size={14} />
                   Frame It
