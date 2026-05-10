@@ -56,7 +56,9 @@ const AfterframeCard = ({
               <Bookmark size={14} fill={isSaved ? "currentColor" : "none"} />
             </button>
           )}
-          <span>{formatDistanceToNow(new Date(publishedAt), { addSuffix: true })}</span>
+          <span className="hidden sm:inline">
+            {formatDistanceToNow(new Date(publishedAt), { addSuffix: true })}
+          </span>
         </div>
       </div>
     </div>

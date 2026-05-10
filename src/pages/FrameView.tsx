@@ -159,7 +159,7 @@ const FrameView = () => {
         </h1>
 
         {/* AUTHOR ROW — avatar and name link to profile */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <Link 
             to={`/${author?.username}`}
             className="flex items-center gap-3 
@@ -234,7 +234,7 @@ const FrameView = () => {
         </div>
 
         {/* SHARE */}
-        <div className="flex justify-end mb-6">
+        <div className="flex flex-wrap justify-end gap-2 mb-6">
           <ShareButton
             title={frame.title}
             oneLiner={frame.the_one_liner}
