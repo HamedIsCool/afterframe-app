@@ -46,8 +46,8 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="w-full max-w-sm bg-card border border-border p-8">
+    <div className="min-h-screen flex items-center justify-center bg-[#0A0A0A] px-4 font-['Space_Grotesk']">
+      <div className="w-full max-w-sm bg-[#141414] border border-[#2A2A2A] p-8">
         <h1 className="text-2xl font-bold text-foreground mb-6">Sign Up</h1>
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
@@ -57,7 +57,7 @@ const Signup = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              className="w-full bg-background border border-border rounded-sm px-3 py-2 text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-accent"
+              className="w-full bg-[#0A0A0A] border border-[#2A2A2A] px-3 py-2 text-[#F5F0E8] text-sm outline-none focus:border-[#C8A96E] transition-colors"
             />
           </div>
           <div>
@@ -66,7 +66,7 @@ const Signup = () => {
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full bg-background border border-border rounded-sm px-3 py-2 text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-accent"
+              className="w-full bg-[#0A0A0A] border border-[#2A2A2A] px-3 py-2 text-[#F5F0E8] text-sm outline-none focus:border-[#C8A96E] transition-colors"
             />
           </div>
           <div>
@@ -76,7 +76,7 @@ const Signup = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full bg-background border border-border rounded-sm px-3 py-2 text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-accent"
+              className="w-full bg-[#0A0A0A] border border-[#2A2A2A] px-3 py-2 text-[#F5F0E8] text-sm outline-none focus:border-[#C8A96E] transition-colors"
             />
           </div>
           <div>
@@ -87,7 +87,7 @@ const Signup = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full bg-background border border-border rounded-sm px-3 py-2 text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-accent"
+              className="w-full bg-[#0A0A0A] border border-[#2A2A2A] px-3 py-2 text-[#F5F0E8] text-sm outline-none focus:border-[#C8A96E] transition-colors"
             />
           </div>
           <Button type="submit" variant="accentFill" className="w-full" disabled={loading}>
