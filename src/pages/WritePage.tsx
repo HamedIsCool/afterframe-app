@@ -31,8 +31,6 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
   });
   const [saving, setSaving] = useState(false);
   const isPublished = initialData?.is_published === "true";
-
-  const isPublished = initialData?.is_published === "true";
   const authorUsername = initialData?.author_username || "";
 
   const [dirty, setDirty] = useState(false);
