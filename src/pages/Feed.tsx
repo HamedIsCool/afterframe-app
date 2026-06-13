@@ -97,7 +97,7 @@ const Feed = () => {
   if (loading) return <div className="min-h-screen flex items-center justify-center text-[#999]">Loading...</div>;
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-2xl">
+    <div className="w-full px-0 py-8 max-w-2xl">
       <h1 className="text-2xl font-bold text-foreground mb-8">
         {searchQuery ? `Results for "${searchQuery}"` : "Feed"}
       </h1>
