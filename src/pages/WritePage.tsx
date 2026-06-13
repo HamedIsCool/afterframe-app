@@ -30,6 +30,7 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
     the_one_liner: initialData?.the_one_liner || "",
   });
   const [saving, setSaving] = useState(false);
+  const isPublished = initialData?.is_published === "true";
 
   const isPublished = initialData?.is_published === "true";
   const authorUsername = initialData?.author_username || "";
@@ -61,7 +62,9 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
       the_retroactive_why: values.the_retroactive_why,
       the_one_liner: values.the_one_liner,
       is_published: publish,
-      ...(publish ? { published_at: new Date().toISOString() } : {}),
+      // Only stamp published_at the first time a frame is published.
+      // Editing an already-published frame must not reset its date.
+      ...(publish && !isPublished ? { published_at: new Date().toISOString() } : {}),
     };
 
     let error;

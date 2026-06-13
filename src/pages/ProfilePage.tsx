@@ -77,7 +77,19 @@ const ProfilePage = () => {
   };
 
   if (loading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading...</div>;
-  if (!profile) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">User not found</div>;
+  if (!loading && !profile) {
+    return (
+      <div className="w-full py-20 text-center">
+        <div className="w-8 h-8 border-t-2 border-l-2 border-[#C8A96E] mb-6 mx-auto" />
+        <p className="text-xs uppercase tracking-[0.2em] text-[#C8A96E] font-bold mb-3">
+          Profile not found
+        </p>
+        <p className="text-sm text-[#888]">
+          No one here by that name.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full px-0 py-8">
