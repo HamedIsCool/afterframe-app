@@ -62,6 +62,7 @@ const App = () => (
             <Route path="/write" element={<ProtectedRoute><WritePage /></ProtectedRoute>} />
             <Route path="/edit/:id" element={<ProtectedRoute><EditPage /></ProtectedRoute>} />
             <Route path="/frame/:username/:id" element={<FrameView />} />
+            <Route path="/f/:id" element={<FrameView />} />
             <Route path="/dashboard" element={<ProtectedRoute><SidebarLayout><Dashboard /></SidebarLayout></ProtectedRoute>} />
             <Route path="/dashboard/frames" element={<ProtectedRoute><SidebarLayout><Dashboard /></SidebarLayout></ProtectedRoute>} />
             <Route path="/dashboard/saved" element={<ProtectedRoute><SidebarLayout><Dashboard /></SidebarLayout></ProtectedRoute>} />

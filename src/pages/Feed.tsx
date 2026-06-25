@@ -27,7 +27,7 @@ const Feed = () => {
     setLoading(true);
     const { data, error } = await supabase
       .from("afterframes")
-      .select("id, title, the_one_liner, published_at, author:profiles!author_id(username, avatar_url)")
+      .select("id, title, the_one_liner, published_at, is_anonymous, author:profiles!author_id(username, avatar_url)")
       .eq("is_published", true)
       .order("published_at", { ascending: false });
 
@@ -42,7 +42,7 @@ const Feed = () => {
     setLoading(true);
     const { data, error } = await supabase
       .from("afterframes")
-      .select("id, title, the_one_liner, published_at, author:profiles!author_id(username, avatar_url)")
+      .select("id, title, the_one_liner, published_at, is_anonymous, author:profiles!author_id(username, avatar_url)")
       .eq("is_published", true)
       .or(`title.ilike.%${safeQuery}%,the_one_liner.ilike.%${safeQuery}%`)
       .order("published_at", { ascending: false });
@@ -117,6 +117,7 @@ const Feed = () => {
               oneLiner={frame.the_one_liner}
               authorUsername={frame.author.username}
               authorAvatar={frame.author.avatar_url}
+              isAnonymous={frame.is_anonymous}
               publishedAt={frame.published_at}
               likeCount={frame.like_count}
               commentCount={frame.comment_count}

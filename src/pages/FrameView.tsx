@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
+import { frameUrl } from "@/lib/frameUrl";
 import { Heart, Bookmark, MessageSquare, Pencil, X, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -31,6 +32,7 @@ const FrameView = () => {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
+  const location = useLocation();
   const [authPrompt, setAuthPrompt] = useState(false);
   const [liking, setLiking] = useState(false);
 
@@ -40,9 +42,20 @@ const FrameView = () => {
     const fetchAll = async () => {
       const { data: f } = await supabase.from("afterframes").select("*").eq("id", id).single();
       if (!f) { setLoading(false); return; }
-      setFrame(f);
 
       const { data: a } = await supabase.from("profiles").select("*").eq("id", f.author_id).single();
+
+      // Canonical redirect: ensure the URL matches the frame's anonymity.
+      // Anonymous frames live at /f/:id; attributed at /frame/:username/:id.
+      const canonical = f.is_anonymous
+        ? `/f/${f.id}`
+        : `/frame/${a?.username || ""}/${f.id}`;
+      if (location.pathname !== canonical) {
+        navigate(canonical, { replace: true });
+        return;
+      }
+
+      setFrame(f);
       setAuthor(a);
 
       const { data: likes } = await supabase.from("likes").select("*").eq("afterframe_id", id!);
@@ -70,7 +83,7 @@ const FrameView = () => {
     setPageMeta({
       title: frame.title,
       description: frame.the_one_liner,
-      url: `https://afterfra.me/frame/${author.username}/${frame.id}`,
+      url: `https://afterfra.me${frameUrl({ id: frame.id, is_anonymous: frame.is_anonymous, author })}`,
     });
   }, [frame, author]);
 
@@ -162,36 +175,59 @@ const FrameView = () => {
           {frame.title}
         </h1>
 
-        {/* AUTHOR ROW — avatar and name link to profile */}
+        {/* AUTHOR ROW — "Anonymous" when flagged, otherwise links to profile */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-          <Link 
-            to={`/${author?.username}`}
-            className="flex items-center gap-3 
-                     hover:opacity-80 transition-opacity"
-          >
-            <div className="w-9 h-9 rounded-full bg-[#1A1A1A] 
-                          border border-[#2A2A2A] 
-                          flex items-center justify-center 
-                          text-sm text-[#888] 
-                          overflow-hidden shrink-0">
-              {author?.avatar_url
-                ? <img src={author.avatar_url} alt="" 
-                     className="w-full h-full object-cover" />
-                : author?.username?.charAt(0).toUpperCase()}
+          {frame.is_anonymous ? (
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-[#1A1A1A]
+                            border border-[#2A2A2A]
+                            flex items-center justify-center
+                            text-sm text-[#555] shrink-0">
+                ?
+              </div>
+              <div>
+                <p className="text-sm text-[#888] font-medium">
+                  Anonymous
+                </p>
+                <p className="text-xs text-[#999]">
+                  {frame.updated_at && new Date(frame.updated_at) > new Date(frame.published_at)
+                    ? `updated ${formatDistanceToNow(new Date(frame.updated_at), { addSuffix: true })}`
+                    : frame.published_at
+                    ? formatDistanceToNow(new Date(frame.published_at), { addSuffix: true })
+                    : ""}
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-[#F5F0E8] font-medium">
-                {author?.username}
-              </p>
-              <p className="text-xs text-[#999]">
-                {frame.updated_at && new Date(frame.updated_at) > new Date(frame.published_at)
-                  ? `updated ${formatDistanceToNow(new Date(frame.updated_at), { addSuffix: true })}`
-                  : frame.published_at
-                  ? formatDistanceToNow(new Date(frame.published_at), { addSuffix: true })
-                  : ""}
-              </p>
-            </div>
-          </Link>
+          ) : (
+            <Link
+              to={`/${author?.username}`}
+              className="flex items-center gap-3
+                       hover:opacity-80 transition-opacity"
+            >
+              <div className="w-9 h-9 rounded-full bg-[#1A1A1A]
+                            border border-[#2A2A2A]
+                            flex items-center justify-center
+                            text-sm text-[#888]
+                            overflow-hidden shrink-0">
+                {author?.avatar_url
+                  ? <img src={author.avatar_url} alt=""
+                       className="w-full h-full object-cover" />
+                  : author?.username?.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <p className="text-sm text-[#F5F0E8] font-medium">
+                  {author?.username}
+                </p>
+                <p className="text-xs text-[#999]">
+                  {frame.updated_at && new Date(frame.updated_at) > new Date(frame.published_at)
+                    ? `updated ${formatDistanceToNow(new Date(frame.updated_at), { addSuffix: true })}`
+                    : frame.published_at
+                    ? formatDistanceToNow(new Date(frame.published_at), { addSuffix: true })
+                    : ""}
+                </p>
+              </div>
+            </Link>
+          )}
           <div className="flex items-center gap-4">
             {isOwner && (
               <Link

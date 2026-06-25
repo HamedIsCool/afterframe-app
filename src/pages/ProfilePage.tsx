@@ -30,6 +30,7 @@ const ProfilePage = () => {
         .select("id, title, the_one_liner, published_at")
         .eq("author_id", p.id)
         .eq("is_published", true)
+        .eq("is_anonymous", false)
         .order("published_at", { ascending: false });
 
       // Get counts

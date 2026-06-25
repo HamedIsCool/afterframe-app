@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { frameUrl } from "@/lib/frameUrl";
 import { Heart, MessageSquare, Bookmark } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 
@@ -8,6 +9,7 @@ interface AfterframeCardProps {
   oneLiner: string;
   authorUsername: string;
   authorAvatar?: string | null;
+  isAnonymous?: boolean;
   publishedAt: string;
   likeCount: number;
   commentCount: number;
@@ -21,6 +23,7 @@ const AfterframeCard = ({
   oneLiner,
   authorUsername,
   authorAvatar,
+  isAnonymous,
   publishedAt,
   likeCount,
   commentCount,
@@ -29,21 +32,30 @@ const AfterframeCard = ({
 }: AfterframeCardProps) => {
   return (
     <div className="border border-[#1E1E1E] bg-[#111111] p-6 hover:border-[#2A2A2A] transition-colors">
-      <Link to={`/frame/${authorUsername}/${id}`}>
+      <Link to={frameUrl({ id, is_anonymous: isAnonymous, authorUsername })}>
         <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>
         <p className="text-accent italic text-sm mb-4 line-clamp-2">"{oneLiner}"</p>
       </Link>
       <div className="flex items-center justify-between">
-        <Link to={`/${authorUsername}`} className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-muted border border-border flex items-center justify-center text-xs text-muted-foreground overflow-hidden">
-            {authorAvatar ? (
-              <img src={authorAvatar} alt="" className="w-full h-full object-cover" />
-            ) : (
-              authorUsername?.charAt(0).toUpperCase()
-            )}
+        {isAnonymous ? (
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-full bg-[#1A1A1A] border border-[#2A2A2A] flex items-center justify-center text-xs text-[#555] shrink-0">
+              ?
+            </div>
+            <span className="text-sm text-[#888]">Anonymous</span>
           </div>
-          <span className="text-sm text-[#999]">{authorUsername}</span>
-        </Link>
+        ) : (
+          <Link to={`/${authorUsername}`} className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-full bg-muted border border-border flex items-center justify-center text-xs text-muted-foreground overflow-hidden">
+              {authorAvatar ? (
+                <img src={authorAvatar} alt="" className="w-full h-full object-cover" />
+              ) : (
+                authorUsername?.charAt(0).toUpperCase()
+              )}
+            </div>
+            <span className="text-sm text-[#999]">{authorUsername}</span>
+          </Link>
+        )}
         <div className="flex items-center gap-4 text-[#999] text-sm">
           <span className="flex items-center gap-1">
             <Heart size={14} /> {likeCount}

@@ -50,7 +50,7 @@ async function generate() {
       const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
       const { data, error } = await supabase
         .from("afterframes")
-        .select("id, updated_at, published_at, author:profiles!author_id(username)")
+        .select("id, updated_at, published_at, is_anonymous, author:profiles!author_id(username)")
         .eq("is_published", true)
         .order("published_at", { ascending: false });
 
@@ -59,8 +59,10 @@ async function generate() {
       } else if (data) {
         for (const frame of data) {
           const username = frame.author?.username;
-          if (!username) continue;
-          const loc = `${SITE_URL}/frame/${encodeURIComponent(username)}/${frame.id}`;
+          const loc = frame.is_anonymous
+            ? `${SITE_URL}/f/${frame.id}`
+            : (username ? `${SITE_URL}/frame/${encodeURIComponent(username)}/${frame.id}` : null);
+          if (!loc) continue;
           const lastmod = (frame.updated_at || frame.published_at || "").split("T")[0];
           urls.push(buildUrl(loc, lastmod, "weekly", "0.7"));
         }
