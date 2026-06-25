@@ -19,6 +19,7 @@ export type Database = {
           author_id: string
           created_at: string | null
           id: string
+          is_anonymous: boolean
           is_published: boolean | null
           published_at: string | null
           the_event: string
@@ -27,11 +28,13 @@ export type Database = {
           the_pivot: string
           the_retroactive_why: string
           title: string
+          updated_at: string | null
         }
         Insert: {
           author_id: string
           created_at?: string | null
           id?: string
+          is_anonymous?: boolean
           is_published?: boolean | null
           published_at?: string | null
           the_event: string
@@ -40,11 +43,13 @@ export type Database = {
           the_pivot: string
           the_retroactive_why: string
           title: string
+          updated_at?: string | null
         }
         Update: {
           author_id?: string
           created_at?: string | null
           id?: string
+          is_anonymous?: boolean
           is_published?: boolean | null
           published_at?: string | null
           the_event?: string
@@ -53,6 +58,7 @@ export type Database = {
           the_pivot?: string
           the_retroactive_why?: string
           title?: string
+          updated_at?: string | null
         }
         Relationships: [
           {

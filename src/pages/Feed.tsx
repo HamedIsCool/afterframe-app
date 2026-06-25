@@ -10,6 +10,7 @@ interface FeedItem {
   title: string;
   the_one_liner: string;
   published_at: string;
+  is_anonymous?: boolean;
   author: { username: string; avatar_url: string | null };
   like_count: number;
   comment_count: number;

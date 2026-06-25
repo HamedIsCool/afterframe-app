@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { frameUrl } from "@/lib/frameUrl";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -32,8 +33,12 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
   const [saving, setSaving] = useState(false);
   const isPublished = initialData?.is_published === "true";
   const authorUsername = initialData?.author_username || "";
+  const wasAnonymous = initialData?.is_anonymous === "true";
 
+  const [isAnonymous, setIsAnonymous] = useState(wasAnonymous);
   const [dirty, setDirty] = useState(false);
+  const [linkChanged, setLinkChanged] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const handleSave = async (publish: boolean) => {
     if (!user) return;
@@ -60,6 +65,7 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
       the_retroactive_why: values.the_retroactive_why,
       the_one_liner: values.the_one_liner,
       is_published: publish,
+      is_anonymous: isAnonymous,
       // Only stamp published_at the first time a frame is published.
       // Editing an already-published frame must not reset its date.
       ...(publish && !isPublished ? { published_at: new Date().toISOString() } : {}),
@@ -80,10 +86,26 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
     setSaving(false);
     if (error) {
       toast.error(error.message);
-    } else {
-      toast.success(publish ? "Published!" : "Draft saved");
-      navigate("/dashboard");
+      return;
     }
+
+    // If editing an already-published frame and the anonymity flag flipped,
+    // the canonical URL changed. Surface the new link so the user can re-share.
+    if (editId && isPublished && isAnonymous !== wasAnonymous) {
+      const newPath = frameUrl({ id: editId, is_anonymous: isAnonymous, authorUsername });
+      setLinkChanged(`https://afterfra.me${newPath}`);
+      return;
+    }
+
+    toast.success(publish ? "Published!" : "Draft saved");
+    navigate("/dashboard");
+  };
+
+  const copyNewLink = async () => {
+    if (!linkChanged) return;
+    await navigator.clipboard.writeText(linkChanged);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
   };
 
   return (
@@ -294,11 +316,29 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
                         py-4 mt-0 flex items-center
                         justify-between gap-3">
 
-          {/* Left: link to live frame if published */}
-          <div>
-            {editId && isPublished && authorUsername && (
+          {/* Left: anonymity toggle + view-frame link */}
+          <div className="flex flex-col gap-2">
+            <button
+              type="button"
+              onClick={() => { setIsAnonymous(a => !a); setDirty(true); }}
+              className="flex items-center gap-2 text-xs text-[#888]
+                         hover:text-[#F5F0E8] transition-colors"
+            >
+              <span className={`w-4 h-4 border flex items-center justify-center
+                ${isAnonymous ? "bg-[#C8A96E] border-[#C8A96E]" : "border-[#555]"}`}>
+                {isAnonymous && <span className="text-[#0A0A0A] text-[10px] font-bold">✓</span>}
+              </span>
+              Publish anonymously
+            </button>
+            {isPublished && isAnonymous !== wasAnonymous && (
+              <p className="text-[10px] text-[#C8A96E] leading-snug max-w-[260px]">
+                Changing this will change your frame's link. You'll get the new
+                link after saving.
+              </p>
+            )}
+            {editId && isPublished && (
               <a
-                href={`/frame/${authorUsername}/${editId}`}
+                href={frameUrl({ id: editId, is_anonymous: wasAnonymous, authorUsername })}
                 className="text-xs text-[#555] hover:text-[#C8A96E]
                            transition-colors uppercase tracking-widest"
               >
@@ -324,6 +364,41 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
         </div>
 
       </div>
+
+      {/* NEW LINK MODAL — shown when anonymity change altered the URL */}
+      {linkChanged && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+          <div className="w-full max-w-sm bg-[#141414] border border-[#2A2A2A] p-6 font-['Space_Grotesk']">
+            <div className="w-8 h-8 border-t-2 border-l-2 border-[#C8A96E] mb-6" />
+            <p className="text-xs uppercase tracking-[0.2em] text-[#C8A96E] font-bold mb-3">
+              Your link changed
+            </p>
+            <p className="text-sm text-[#888] leading-relaxed mb-4">
+              Because you changed the anonymity setting, this frame now lives at a
+              new address. Old links will redirect, but here's the canonical one:
+            </p>
+            <div className="bg-[#0A0A0A] border border-[#2A2A2A] px-3 py-2 mb-4">
+              <p className="text-xs text-[#F5F0E8] font-mono break-all">{linkChanged}</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={copyNewLink}
+                className="flex-1 text-sm font-bold uppercase tracking-widest px-4 py-2.5
+                           bg-[#C8A96E] text-[#0A0A0A] hover:bg-[#B89558] transition-colors"
+              >
+                {copied ? "Copied" : "Copy Link"}
+              </button>
+              <button
+                onClick={() => { setLinkChanged(null); navigate("/dashboard"); }}
+                className="text-sm text-[#888] px-4 py-2.5 border border-[#2A2A2A]
+                           hover:border-[#555] hover:text-[#F5F0E8] transition-colors"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

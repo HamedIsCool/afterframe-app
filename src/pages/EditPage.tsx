@@ -38,6 +38,7 @@ const EditPage = () => {
           the_retroactive_why: frame.the_retroactive_why,
           the_one_liner: frame.the_one_liner,
           is_published: String(frame.is_published),
+          is_anonymous: String(frame.is_anonymous),
         });
       }
       setLoading(false);

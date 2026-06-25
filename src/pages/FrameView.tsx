@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import { frameUrl } from "@/lib/frameUrl";
 import { Heart, Bookmark, MessageSquare, Pencil, X, ArrowRight } from "lucide-react";
@@ -32,7 +32,6 @@ const FrameView = () => {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
-  const location = useLocation();
   const [authPrompt, setAuthPrompt] = useState(false);
   const [liking, setLiking] = useState(false);
 
@@ -50,7 +49,8 @@ const FrameView = () => {
       const canonical = f.is_anonymous
         ? `/f/${f.id}`
         : `/frame/${a?.username || ""}/${f.id}`;
-      if (location.pathname !== canonical) {
+      const currentPath = window.location.pathname;
+      if (currentPath !== canonical) {
         navigate(canonical, { replace: true });
         return;
       }
