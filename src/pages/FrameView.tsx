@@ -32,6 +32,7 @@ const FrameView = () => {
 
   const navigate = useNavigate();
   const [authPrompt, setAuthPrompt] = useState(false);
+  const [liking, setLiking] = useState(false);
 
   const isOwner = user?.id === frame?.author_id;
 
@@ -75,6 +76,8 @@ const FrameView = () => {
 
   const toggleLike = async () => {
     if (!user) { setAuthPrompt(true); return; }
+    if (liking) return;
+    setLiking(true);
     if (liked) {
       await supabase.from("likes").delete().eq("user_id", user.id).eq("afterframe_id", id!);
       setLiked(false);
@@ -93,6 +96,7 @@ const FrameView = () => {
         });
       }
     }
+    setLiking(false);
   };
 
   const toggleSave = async () => {

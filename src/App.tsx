@@ -6,7 +6,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
+import { usePageTracking } from "@/hooks/usePageTracking";
 import Navbar from "@/components/Navbar";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Landing from "@/pages/Landing";
 import Login from "@/pages/Login";
@@ -33,7 +35,13 @@ const ScrollToTop = () => {
   return null;
 };
 
+const PageTracking = () => {
+  usePageTracking();
+  return null;
+};
+
 const App = () => (
+  <ErrorBoundary>
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <SidebarProvider>
@@ -42,6 +50,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <ScrollToTop />
+          <PageTracking />
           <Navbar />
           <Routes>
             <Route path="/" element={<Landing />} />
@@ -68,6 +77,7 @@ const App = () => (
       </SidebarProvider>
     </AuthProvider>
   </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

@@ -43,7 +43,7 @@ const Dashboard = () => {
     setFramesLoading(true);
     const { data } = await supabase
       .from("afterframes")
-      .select("*")
+      .select("id, title, the_one_liner, is_published, published_at, updated_at, created_at, author_id")
       .eq("author_id", user.id)
       .order("created_at", { ascending: false });
     setFrames(data || []);
