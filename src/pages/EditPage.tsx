@@ -39,6 +39,7 @@ const EditPage = () => {
           the_one_liner: frame.the_one_liner,
           is_published: String(frame.is_published),
           is_anonymous: String(frame.is_anonymous),
+          author_username: frame.author_username || "",
         });
       }
       setLoading(false);
