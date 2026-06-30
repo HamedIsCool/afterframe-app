@@ -324,7 +324,7 @@ const FrameView = () => {
                           p-6 min-h-[180px]">
               <p className="text-xs font-bold uppercase 
                           tracking-[0.2em] text-[#555] mb-3">
-                The Event
+                01 · The Event
               </p>
               <p className="text-[#F5F0E8] font-medium 
                           leading-relaxed text-base">
@@ -337,7 +337,7 @@ const FrameView = () => {
                           p-6 min-h-[180px]">
               <p className="text-xs font-bold uppercase 
                           tracking-[0.2em] text-[#555] mb-3">
-                The Pivot
+                03 · The Pivot
               </p>
               <p className="text-[#F5F0E8] font-medium 
                           leading-relaxed text-base">
@@ -357,7 +357,7 @@ const FrameView = () => {
                  style={{ borderLeft: '3px solid #8B3A3A' }}>
               <p className="text-xs font-bold uppercase 
                           tracking-[0.2em] text-[#8B3A3A] mb-3">
-                Gut-Punch
+                02 · Gut-Punch
               </p>
               <div className="w-8 h-px bg-[#8B3A3A]/30 mb-4" />
               <p className="text-[#F5F0E8]/80 italic font-medium 
@@ -384,7 +384,7 @@ const FrameView = () => {
                               border-[#C8A96E]" />
               <p className="text-xs font-bold uppercase 
                           tracking-[0.3em] text-[#C8A96E] mb-4">
-                Retroactive Why
+                04 · Retroactive Why
               </p>
               <p className="font-semibold text-[#F5F0E8] 
                           leading-relaxed text-lg">
@@ -398,7 +398,7 @@ const FrameView = () => {
         <div className="w-full bg-[#F5F0E8] mt-0 px-8 py-6">
           <p className="text-[10px] font-bold uppercase 
                         tracking-[0.25em] text-[#0A0A0A]/40 mb-3">
-            The One-Liner
+            05 · The One-Liner
           </p>
           <p className="font-bold text-[#0A0A0A] uppercase 
                         italic text-center leading-snug text-lg">

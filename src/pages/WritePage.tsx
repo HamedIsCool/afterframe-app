@@ -155,7 +155,7 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
                               justify-between mb-3">
                 <label className="text-xs font-bold uppercase 
                                   tracking-[0.2em] text-[#555]">
-                  The Event
+                  01 · The Event
                 </label>
                 <span className="text-xs text-[#333] tabular-nums">
                   {values.the_event.length}/120
@@ -185,7 +185,7 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
                               justify-between mb-3">
                 <label className="text-xs font-bold uppercase 
                                   tracking-[0.2em] text-[#555]">
-                  The Pivot
+                  03 · The Pivot
                 </label>
                 <span className="text-xs text-[#333] tabular-nums">
                   {values.the_pivot.length}/120
@@ -222,7 +222,7 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
                               justify-between mb-3">
                 <label className="text-xs font-bold uppercase 
                                   tracking-[0.2em] text-[#8B3A3A]">
-                  Gut-Punch
+                  02 · Gut-Punch
                 </label>
                 <span className="text-xs text-[#8B3A3A]/40 
                                  tabular-nums">
@@ -267,7 +267,7 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
                               justify-between mb-4">
                 <label className="text-xs font-bold uppercase 
                                   tracking-[0.3em] text-[#C8A96E]">
-                  Retroactive Why
+                  04 · Retroactive Why
                 </label>
                 <span className="text-xs text-[#C8A96E]/30 
                                  tabular-nums">
@@ -300,7 +300,7 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
                           justify-between mb-3">
             <label className="text-[10px] font-bold uppercase 
                               tracking-[0.25em] text-[#0A0A0A]/50">
-              The One-Liner
+              05 · The One-Liner
             </label>
             <span className="text-xs text-[#0A0A0A]/30 tabular-nums">
               {values.the_one_liner.length}/80
