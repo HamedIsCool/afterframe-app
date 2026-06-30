@@ -262,7 +262,26 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_frames: {
+        Row: {
+          id: string | null
+          title: string | null
+          the_event: string | null
+          the_gut_punch: string | null
+          the_pivot: string | null
+          the_retroactive_why: string | null
+          the_one_liner: string | null
+          is_published: boolean | null
+          is_anonymous: boolean | null
+          published_at: string | null
+          updated_at: string | null
+          created_at: string | null
+          author_id: string | null
+          author_username: string | null
+          author_avatar_url: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never

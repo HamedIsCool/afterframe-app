@@ -15,11 +15,12 @@ const EditPage = () => {
   useEffect(() => {
     if (authLoading) return;
     const fetch = async () => {
-      const { data: frame } = await supabase
+      const { data: frameData } = await supabase
         .from("afterframes")
         .select("*, author:profiles!author_id(username)")
         .eq("id", id)
         .single();
+      const frame = frameData as any;
 
       // Ownership check — only the author can edit.
       if (frame && user && frame.author_id !== user.id) {
