@@ -56,11 +56,26 @@ const Dashboard = () => {
     setSavedLoading(true);
     const { data: saves } = await supabase
       .from("saves")
-      .select("afterframe_id, afterframe:afterframes!afterframe_id(id, title, the_one_liner, published_at, author:profiles!author_id(username, avatar_url))")
+      .select("afterframe_id")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false });
 
-    const items = (saves || []).map((s: any) => s.afterframe).filter(Boolean);
+    const savedIds = (saves || []).map((s: any) => s.afterframe_id);
+    let items: any[] = [];
+    if (savedIds.length > 0) {
+      const { data: framesData } = await supabase
+        .from("public_frames")
+        .select("id, title, the_one_liner, published_at, is_anonymous, author_username, author_avatar_url")
+        .in("id", savedIds);
+      items = (framesData || []).map((f: any) => ({
+        id: f.id,
+        title: f.title,
+        the_one_liner: f.the_one_liner,
+        published_at: f.published_at,
+        is_anonymous: f.is_anonymous,
+        author: { username: f.author_username, avatar_url: f.author_avatar_url },
+      }));
+    }
     const ids = items.map((x: any) => x.id);
     const [likesRes, commentsRes] = await Promise.all([
       supabase.from("likes").select("afterframe_id").in("afterframe_id", ids),
@@ -79,9 +94,17 @@ const Dashboard = () => {
     if (activeTab === "saved") fetchSaved();
   }, [user, activeTab]);
 
+  const [deleting, setDeleting] = useState(false);
+
   const deleteFrame = async () => {
-    if (!deleteTarget) return;
-    await supabase.from("afterframes").delete().eq("id", deleteTarget.id);
+    if (!deleteTarget || deleting) return;
+    setDeleting(true);
+    const { error } = await supabase.from("afterframes").delete().eq("id", deleteTarget.id);
+    setDeleting(false);
+    if (error) {
+      toast.error("Could not delete. Try again.");
+      return;
+    }
     toast.success("Afterframe deleted");
     setDeleteTarget(null);
     fetchFrames();
@@ -228,6 +251,7 @@ const Dashboard = () => {
                         oneLiner={f.the_one_liner}
                         authorUsername={f.author?.username}
                         authorAvatar={f.author?.avatar_url}
+                        isAnonymous={f.is_anonymous}
                         publishedAt={f.published_at}
                         likeCount={f.like_count}
                         commentCount={f.comment_count}
@@ -281,11 +305,13 @@ const Dashboard = () => {
               </button>
               <button
                 onClick={deleteFrame}
+                disabled={deleting}
                 className="text-sm bg-[#8B3A3A] text-[#F5F0E8]
                            font-semibold px-4 py-2
-                           hover:bg-[#7A2F2F] transition-colors"
+                           hover:bg-[#7A2F2F] transition-colors
+                           disabled:opacity-50"
               >
-                Delete
+                {deleting ? "Deleting…" : "Delete"}
               </button>
             </div>
           </div>

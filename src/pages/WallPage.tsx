@@ -11,9 +11,8 @@ const WallPage = () => {
   useEffect(() => {
     const fetchLines = async () => {
       const { data } = await supabase
-        .from("afterframes")
-        .select("id, the_one_liner, title, published_at, updated_at, is_anonymous, author:profiles!author_id(username)")
-        .eq("is_published", true)
+        .from("public_frames")
+        .select("id, the_one_liner, title, published_at, updated_at, is_anonymous, author_username")
         .not("the_one_liner", "is", null)
         .order("published_at", { ascending: false });
       setLines(data || []);
@@ -58,7 +57,7 @@ const WallPage = () => {
             {lines.map((line) => (
               <Link
                 key={line.id}
-                to={frameUrl(line)}
+                to={frameUrl({ id: line.id, is_anonymous: line.is_anonymous, authorUsername: line.author_username })}
                 className="group relative flex flex-col
                            border border-[#222] bg-[#101010]
                            pt-7 px-6 pb-5
@@ -83,7 +82,7 @@ const WallPage = () => {
                                 text-[10px] uppercase tracking-[0.12em]">
                   <span className="text-[#555] group-hover:text-[#888]
                                    transition-colors font-medium">
-                    {line.is_anonymous ? "Anonymous" : line.author?.username}
+                    {line.is_anonymous ? "Anonymous" : line.author_username}
                   </span>
                   <span className="text-[#383838] group-hover:text-[#555]
                                    transition-colors">

@@ -10,6 +10,7 @@ interface FeedItem {
   title: string;
   the_one_liner: string;
   published_at: string;
+  updated_at?: string;
   is_anonymous?: boolean;
   author: { username: string; avatar_url: string | null };
   like_count: number;
@@ -27,9 +28,8 @@ const Feed = () => {
   const fetchFeed = async () => {
     setLoading(true);
     const { data, error } = await supabase
-      .from("afterframes")
-      .select("id, title, the_one_liner, published_at, is_anonymous, author:profiles!author_id(username, avatar_url)")
-      .eq("is_published", true)
+      .from("public_frames")
+      .select("id, title, the_one_liner, published_at, updated_at, is_anonymous, author_username, author_avatar_url")
       .order("published_at", { ascending: false });
 
     if (error) { toast.error("Failed to load feed"); setLoading(false); return; }
@@ -42,9 +42,8 @@ const Feed = () => {
     if (!safeQuery) { fetchFeed(); return; }
     setLoading(true);
     const { data, error } = await supabase
-      .from("afterframes")
-      .select("id, title, the_one_liner, published_at, is_anonymous, author:profiles!author_id(username, avatar_url)")
-      .eq("is_published", true)
+      .from("public_frames")
+      .select("id, title, the_one_liner, published_at, updated_at, is_anonymous, author_username, author_avatar_url")
       .or(`title.ilike.%${safeQuery}%,the_one_liner.ilike.%${safeQuery}%`)
       .order("published_at", { ascending: false });
     if (error) { toast.error("Search failed"); setLoading(false); return; }
@@ -66,7 +65,7 @@ const Feed = () => {
 
     setFrames(rows.map((f: any) => ({
       ...f,
-      author: f.author,
+      author: { username: f.author_username, avatar_url: f.author_avatar_url },
       like_count: likeCounts[f.id] || 0,
       comment_count: commentCounts[f.id] || 0,
     })));
@@ -120,6 +119,7 @@ const Feed = () => {
               authorAvatar={frame.author.avatar_url}
               isAnonymous={frame.is_anonymous}
               publishedAt={frame.published_at}
+              updatedAt={frame.updated_at}
               likeCount={frame.like_count}
               commentCount={frame.comment_count}
               isSaved={savedIds.has(frame.id)}

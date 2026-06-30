@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { frameUrl } from "@/lib/frameUrl";
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,17 @@ const WritePage = ({ editId, initialData }: WritePageProps) => {
   const [dirty, setDirty] = useState(false);
   const [linkChanged, setLinkChanged] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (dirty) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [dirty]);
 
   const handleSave = async (publish: boolean) => {
     if (!user) return;

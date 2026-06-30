@@ -49,19 +49,17 @@ async function generate() {
     try {
       const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
       const { data, error } = await supabase
-        .from("afterframes")
-        .select("id, updated_at, published_at, is_anonymous, author:profiles!author_id(username)")
-        .eq("is_published", true)
+        .from("public_frames")
+        .select("id, updated_at, published_at, is_anonymous, author_username")
         .order("published_at", { ascending: false });
 
       if (error) {
         console.warn("Sitemap: could not fetch frames:", error.message);
       } else if (data) {
         for (const frame of data) {
-          const username = frame.author?.username;
           const loc = frame.is_anonymous
             ? `${SITE_URL}/f/${frame.id}`
-            : (username ? `${SITE_URL}/frame/${encodeURIComponent(username)}/${frame.id}` : null);
+            : (frame.author_username ? `${SITE_URL}/frame/${encodeURIComponent(frame.author_username)}/${frame.id}` : null);
           if (!loc) continue;
           const lastmod = (frame.updated_at || frame.published_at || "").split("T")[0];
           urls.push(buildUrl(loc, lastmod, "weekly", "0.7"));

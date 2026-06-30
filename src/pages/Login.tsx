@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -9,6 +9,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const returnTo = (location.state as any)?.returnTo || "/feed";
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +31,7 @@ const Login = () => {
       return;
     }
 
-    navigate("/feed");
+    navigate(returnTo);
   };
 
   return (
@@ -38,8 +40,9 @@ const Login = () => {
         <h1 className="text-2xl font-bold text-[#F5F0E8] mb-6">Log In</h1>
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="text-sm text-[#888] block mb-1">Email</label>
+            <label htmlFor="login-email" className="text-sm text-[#888] block mb-1">Email</label>
             <input
+              id="login-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -48,8 +51,9 @@ const Login = () => {
             />
           </div>
           <div>
-            <label className="text-sm text-[#888] block mb-1">Password</label>
+            <label htmlFor="login-password" className="text-sm text-[#888] block mb-1">Password</label>
             <input
+              id="login-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

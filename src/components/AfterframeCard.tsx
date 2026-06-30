@@ -11,6 +11,7 @@ interface AfterframeCardProps {
   authorAvatar?: string | null;
   isAnonymous?: boolean;
   publishedAt: string;
+  updatedAt?: string;
   likeCount: number;
   commentCount: number;
   isSaved?: boolean;
@@ -25,6 +26,7 @@ const AfterframeCard = ({
   authorAvatar,
   isAnonymous,
   publishedAt,
+  updatedAt,
   likeCount,
   commentCount,
   isSaved,
@@ -69,7 +71,9 @@ const AfterframeCard = ({
             </button>
           )}
           <span className="hidden sm:inline">
-            {formatDistanceToNow(new Date(publishedAt), { addSuffix: true })}
+            {updatedAt && new Date(updatedAt) > new Date(publishedAt)
+              ? `updated ${formatDistanceToNow(new Date(updatedAt), { addSuffix: true })}`
+              : formatDistanceToNow(new Date(publishedAt), { addSuffix: true })}
           </span>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -19,6 +19,8 @@ const Signup = () => {
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const returnTo = (location.state as any)?.returnTo || "/feed";
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const cleaned = e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "");
@@ -89,7 +91,7 @@ const Signup = () => {
 
     if (signUpData.session) {
       toast.success("Account created!");
-      navigate("/feed");
+      navigate(returnTo);
     } else {
       toast.success("Check your email to confirm your account.");
       navigate("/login");
@@ -102,8 +104,9 @@ const Signup = () => {
         <h1 className="text-2xl font-bold text-[#F5F0E8] mb-6">Sign Up</h1>
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
-            <label className="text-sm text-[#888] block mb-1">Username</label>
+            <label htmlFor="signup-username" className="text-sm text-[#888] block mb-1">Username</label>
             <input
+              id="signup-username"
               type="text"
               value={username}
               onChange={handleUsernameChange}
@@ -116,8 +119,9 @@ const Signup = () => {
             </p>
           </div>
           <div>
-            <label className="text-sm text-[#888] block mb-1">Full Name</label>
+            <label htmlFor="signup-fullname" className="text-sm text-[#888] block mb-1">Full Name</label>
             <input
+              id="signup-fullname"
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
@@ -125,8 +129,9 @@ const Signup = () => {
             />
           </div>
           <div>
-            <label className="text-sm text-[#888] block mb-1">Email</label>
+            <label htmlFor="signup-email" className="text-sm text-[#888] block mb-1">Email</label>
             <input
+              id="signup-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -135,8 +140,9 @@ const Signup = () => {
             />
           </div>
           <div>
-            <label className="text-sm text-[#888] block mb-1">Password</label>
+            <label htmlFor="signup-password" className="text-sm text-[#888] block mb-1">Password</label>
             <input
+              id="signup-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

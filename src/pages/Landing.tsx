@@ -19,9 +19,8 @@ const Landing = () => {
   useEffect(() => {
     const fetchFrames = async () => {
       const { data } = await supabase
-        .from("afterframes")
-        .select("id, title, the_one_liner, author:profiles!author_id(username)")
-        .eq("is_published", true)
+        .from("public_frames")
+        .select("id, title, the_one_liner, is_anonymous, author_username")
         .not("the_one_liner", "is", null)
         .order("published_at", { ascending: false })
         .limit(3);
@@ -148,7 +147,7 @@ const Landing = () => {
               {frames.map((frame) => (
                 <Link
                   key={frame.id}
-                  to={`/frame/${frame.author?.username}/${frame.id}`}
+                  to={frame.is_anonymous ? `/f/${frame.id}` : `/frame/${frame.author_username}/${frame.id}`}
                   className="group block py-7 border-b border-[#141414]
                              hover:border-[#2A2A2A] transition-colors"
                 >
@@ -158,7 +157,7 @@ const Landing = () => {
                     "{frame.the_one_liner}"
                   </p>
                   <p className="text-xs text-[#333] group-hover:text-[#555] transition-colors">
-                    {frame.title} — {frame.author?.username}
+                    {frame.title} — {frame.is_anonymous ? "Anonymous" : frame.author_username}
                   </p>
                 </Link>
               ))}

@@ -74,7 +74,7 @@ const Navbar = () => {
           {user && (
             <button
               onClick={toggle}
-              className="text-[#555] hover:text-[#F5F0E8] transition-colors p-1 shrink-0"
+              className="text-[#555] hover:text-[#F5F0E8] transition-colors p-2.5 shrink-0"
             >
               <Menu size={18} />
             </button>

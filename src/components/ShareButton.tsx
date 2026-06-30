@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Link2, Check } from "lucide-react";
+import { toast } from "sonner";
+import { frameUrl } from "@/lib/frameUrl";
 
 interface ShareButtonProps {
   title: string;
   oneLiner: string;
   authorUsername: string;
   frameId: string;
+  isAnonymous?: boolean;
 }
 
 const ShareButton = ({
@@ -13,15 +16,38 @@ const ShareButton = ({
   oneLiner,
   authorUsername,
   frameId,
+  isAnonymous,
 }: ShareButtonProps) => {
   const [copied, setCopied] = useState(false);
 
-  const frameUrl = `https://afterfra.me/frame/${authorUsername}/${frameId}`;
+  const shareUrl = `https://afterfra.me${frameUrl({ id: frameId, is_anonymous: isAnonymous, authorUsername })}`;
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(frameUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      // Fallback for browsers without clipboard API (or non-HTTPS)
+      const ta = document.createElement("textarea");
+      ta.value = shareUrl;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        const ok = document.execCommand("copy");
+        if (ok) {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2500);
+        } else {
+          toast.error("Couldn't copy. Long-press to copy the link.");
+        }
+      } catch {
+        toast.error("Couldn't copy. Long-press to copy the link.");
+      }
+      document.body.removeChild(ta);
+    }
   };
 
 return (

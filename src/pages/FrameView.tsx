@@ -35,25 +35,47 @@ const FrameView = () => {
   const [authPrompt, setAuthPrompt] = useState(false);
   const [liking, setLiking] = useState(false);
 
-  const isOwner = user?.id === frame?.author_id;
+  const [isOwner, setIsOwner] = useState(false);
+
+  useEffect(() => {
+    if (!user || !id) { setIsOwner(false); return; }
+    const checkOwner = async () => {
+      const { data } = await supabase
+        .from("afterframes")
+        .select("id")
+        .eq("id", id)
+        .eq("author_id", user.id)
+        .maybeSingle();
+      setIsOwner(!!data);
+    };
+    checkOwner();
+  }, [user, id]);
 
   useEffect(() => {
     const fetchAll = async () => {
-      const { data: f } = await supabase.from("afterframes").select("*").eq("id", id).single();
+      const { data: f } = await supabase
+        .from("public_frames")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
       if (!f) { setLoading(false); return; }
-
-      const { data: a } = await supabase.from("profiles").select("*").eq("id", f.author_id).single();
 
       // Canonical redirect: ensure the URL matches the frame's anonymity.
       // Anonymous frames live at /f/:id; attributed at /frame/:username/:id.
       const canonical = f.is_anonymous
         ? `/f/${f.id}`
-        : `/frame/${a?.username || ""}/${f.id}`;
+        : `/frame/${f.author_username || ""}/${f.id}`;
       const currentPath = window.location.pathname;
       if (currentPath !== canonical) {
         navigate(canonical, { replace: true });
-        return;
+        // Do NOT return — let the frame render. The URL updates in place
+        // and the canonical check passes on the next render.
       }
+
+      // author info comes from the view (null for anonymous frames)
+      const a = f.author_id
+        ? { id: f.author_id, username: f.author_username, avatar_url: f.author_avatar_url }
+        : null;
 
       setFrame(f);
       setAuthor(a);
@@ -115,11 +137,13 @@ const FrameView = () => {
   const toggleSave = async () => {
     if (!user) { setAuthPrompt(true); return; }
     if (saved) {
-      await supabase.from("saves").delete().eq("user_id", user.id).eq("afterframe_id", id!);
+      const { error } = await supabase.from("saves").delete().eq("user_id", user.id).eq("afterframe_id", id!);
+      if (error) { toast.error("Could not update. Try again."); return; }
       setSaved(false);
       toast("Removed from saved");
     } else {
-      await supabase.from("saves").insert({ user_id: user.id, afterframe_id: id });
+      const { error } = await supabase.from("saves").insert({ user_id: user.id, afterframe_id: id });
+      if (error) { toast.error("Could not save. Try again."); return; }
       setSaved(true);
       toast("Saved — find it under your profile → Saved", {
         action: {
@@ -245,6 +269,7 @@ const FrameView = () => {
             <button
               onClick={!isOwner ? toggleLike : undefined}
               disabled={isOwner}
+              aria-label={liked ? "Unlike this frame" : "Like this frame"}
               title={isOwner ? "You can't like your own frame" : undefined}
               className={`flex items-center gap-1 text-sm
                         transition-colors
@@ -258,8 +283,9 @@ const FrameView = () => {
               {likeCount}
             </button>
             <button 
-              onClick={toggleSave} 
-              className={`transition-colors 
+              onClick={toggleSave}
+              aria-label={saved ? "Remove from saved" : "Save this frame"}
+              className={`transition-colors
                         ${saved 
                           ? "text-[#C8A96E]" 
                           : "text-[#888] hover:text-[#F5F0E8]"}`}
@@ -280,6 +306,7 @@ const FrameView = () => {
             oneLiner={frame.the_one_liner}
             authorUsername={author?.username || ""}
             frameId={frame.id}
+            isAnonymous={frame.is_anonymous}
           />
         </div>
 
@@ -485,7 +512,8 @@ const FrameView = () => {
             <div className="flex justify-end mb-2">
               <button
                 onClick={() => setAuthPrompt(false)}
-                className="text-[#555] hover:text-[#F5F0E8] 
+                aria-label="Close"
+                className="text-[#555] hover:text-[#F5F0E8]
                            transition-colors"
               >
                 <X size={16} />
